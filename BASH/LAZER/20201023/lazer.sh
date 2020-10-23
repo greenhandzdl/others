@@ -52,7 +52,7 @@ if [ $choice -eq 5 ];
   echo 即将播放...loading
   echo  本次播放:
   tree $HOME/daily/mpv
-  mpv $HOME/daily/mpv
+  mpv $HOME/daily/mpv --shuffle
  fi
 
 cd $HOME
