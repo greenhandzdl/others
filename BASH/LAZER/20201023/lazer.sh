@@ -7,7 +7,7 @@ echo 该程序不具备自主更新能力,请自行决定是否更新
 echo 正在初始化...loading
 cp lazer.sh $HOME/lazer_20201013.sh
 echo 初始化成功
-echo 系统环境 && uname -a && echo 网络状态: && ifconfig && echo 端口开放情况//nmap && nmap 127.0.0.1 && echo 运行时间: && date
+echo 系统环境//screenfetch && screenfetch && echo 网络状态: && ifconfig && echo 端口开放情况//nmap && nmap 127.0.0.1 && echo 运行时间: && date
 echo 懒人快捷:
 echo 选项1:更新
 echo tips:环境termux
