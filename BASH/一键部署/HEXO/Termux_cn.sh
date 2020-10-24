@@ -11,7 +11,7 @@ if [ $choice -eq 1 ];
      pkg install nodejs -y && npm install hexo && hexo init blog && cd blog && hexo g && hexo s
     fi
 
-if [ $choice -eq 1 ];
+if [ $choice -eq 2 ];
    then
 	npm config set registry http://registry.npm.taobao.org
         npm install hexo-cli -g
