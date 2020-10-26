@@ -2,13 +2,13 @@
 echo 作者:Greenhandzdl  helper:Q:157668997
 echo version:20201024
 echo Start...
-echo 选项1适用于网络好的童鞋
+echo 选项1适用于网络好的童鞋(网络不好也没关系，万事开头难，过了一会儿就快了)
 echo 选项2适应于网络不好的童鞋
 read -p "输入选项: " choice
 
 if [ $choice -eq 1 ];
    then
-     pkg install nodejs -y && npm install hexo && hexo init blog && cd blog && hexo g && hexo s
+     pkg install nodejs git -y && npm install nrm -g && nrm use taobao && npm install hexo-cli && hexo init blog && cd blog && hexo g && hexo s
     fi
 
 if [ $choice -eq 2 ];
