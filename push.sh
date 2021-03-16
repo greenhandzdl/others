@@ -4,7 +4,10 @@ echo start
 
 git pull
 git add .
-git commit -m "update"
+
+read -p "输入commit: "  commit
+
+git commit -m "$commit"
 git push
 
 echo end
