@@ -1,0 +1,25 @@
+
+.
+├── BASH
+│   ├── LAZER
+│   │   ├── 20201023
+│   │   │   └── lazer.sh
+│   │   ├── 20201024
+│   │   │   ├── Readme.md
+│   │   │   └── lazer.sh
+│   │   ├── Readme.md
+│   │   └── install.md
+│   ├── Readme.md
+│   └── 一键部署
+│       ├── HEXO
+│       │   ├── Readme.md
+│       │   ├── Termux_cn.sh
+│       │   └── install.md
+│       └── Readme.md
+├── LICENSE
+├── README.md
+├── git_sync.sh
+├── git_update.sh
+└── tree.md
+
+6 directories, 15 files
