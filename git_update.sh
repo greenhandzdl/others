@@ -4,8 +4,8 @@ echo Start
 echo This Is Git_Version.
 
 echo Preparing Project Tree
-echo > tree.md # Create Project Tree
-tree | tee -a tree.md # Load Project Tree
+echo > tree.txt # Create Project Tree
+tree | tee -a tree.txt # Load Project Tree
 # If it's reported error,please offer issues to us
 
 echo Loading

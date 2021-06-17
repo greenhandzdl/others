@@ -20,6 +20,6 @@
 ├── README.md
 ├── git_sync.sh
 ├── git_update.sh
-└── tree.md
+└── tree.txt
 
 6 directories, 15 files
