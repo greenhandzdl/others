@@ -14,11 +14,11 @@ s_y = cir_y*inv(r); %接受sin的函数
 
 plot(cir_x,cir_y, x,c_x, x,s_y ,'.-') ,legend('单位圆','余弦函数','正弦函数'), xlabel('x轴'),ylabel('y轴'),title('正弦余弦的初识','对于单位圆来说,横坐标代表cos(x)纵坐标代表sin(x)'),grid on, axis equal;
 
-ax = gca;
-ax.XAxisLocation = 'origin';
-ax.YAxisLocation = 'origin';
-ax.FontSize = 15;
-box off；
+ax = gca; %
+ax.XAxisLocation = 'origin'; %建立x轴
+ax.YAxisLocation = 'origin'; %建立y轴
+ax.FontSize = 15; %设置标题字体
+box off; %
 
 clear all;
 
