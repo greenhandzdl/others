@@ -11,7 +11,14 @@ x = 0:pi/40:2*pi; %一个普普通通的x轴
 c_x = cir_x*inv(r); %接受cos的函数
 s_y = cir_y*inv(r); %接受sin的函数
 
-plot(cir_x,cir_y, x,c_x, x,s_y ,'.-') ,legend('单位圆','余弦函数','正弦函数'), xlabel('横坐标代表cosx'),ylabel('纵坐标代表sinx'),title('正弦余弦的初识'),grid on, axis equal;
+
+plot(cir_x,cir_y, x,c_x, x,s_y ,'.-') ,legend('单位圆','余弦函数','正弦函数'), xlabel('x轴'),ylabel('y轴'),title('正弦余弦的初识','对于单位圆来说,横坐标代表cos(x)纵坐标代表sin(x)'),grid on, axis equal;
+
+ax = gca;
+ax.XAxisLocation = 'origin';
+ax.YAxisLocation = 'origin';
+ax.FontSize = 15;
+box off；
 
 clear all;
 
