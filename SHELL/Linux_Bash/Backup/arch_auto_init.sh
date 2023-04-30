@@ -52,15 +52,16 @@ if [[ -f /etc/arch-release ]]; then
             sudo chown -R $username:users yay
             cd yay
             sudo chmod 777 .
+            sudo chmod 777 ./PKGBUILD
             sudo chown -R $username:users .
-            su - $username -c "makepkg -si"
+            su - $username -c "cd /opt/yay && makepkg -si"
             alias yay ="yay --noconfirm"
         fi
     fi
 
 
     yay -Syu
-    
+
     # Check if zsh is already installed
     if yay -Qi zsh &> /dev/null; then
         echo "zsh is already installed"
