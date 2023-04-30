@@ -11,7 +11,10 @@ if [[ -f /etc/arch-release ]]; then
         echo
         # Install yay if the user agrees
         if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then
-            sudo pacman -Syu --needed git base-devel sudo
+            whoami #For test
+            pacman -Syu
+            pacman -S sudo
+            sudo pacman -S git base-devel
             # Check if the /opt directory exists and create it if it doesn't
             [ ! -d /opt ] && sudo mkdir /opt
             cd /opt
