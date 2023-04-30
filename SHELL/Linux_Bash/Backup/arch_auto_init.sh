@@ -75,12 +75,12 @@ if [[ -f /etc/arch-release ]]; then
                 pacman -Syu --noconfirm
               fi
             fi
-            sudo pacman -Syu git  --noconfirm
             alias pacman="sudo pacman --noconfirm"
             sudo pacman -S git base-devel --noconfirm
             # Check if the /opt directory exists and create it if it doesn't
             [ ! -d /opt ] && sudo mkdir /opt
             cd /opt
+            ls
             sudo git clone https://aur.archlinux.org/yay.git
             sudo chown -R $username:users yay
             cd yay
