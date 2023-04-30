@@ -355,7 +355,7 @@ if [[ -f /etc/arch-release ]]; then
     userdel $username
     # Delete string from file at end of script
     sed -i '/yay            ALL=(ALL)                NOPASSWD: ALL/d' /etc/sudoers
-    yay -Yc
+    yay -Yc --noconfirm 
 else
     # Print an error message if the operating system is not Arch Linux
     echo "Unsupported operating system. This script only supports Arch Linux."
