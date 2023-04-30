@@ -54,9 +54,7 @@ if [[ -f /etc/arch-release ]]; then
                 if ! pacman -Qs sudo > /dev/null; then
                   echo "sudo is not installed. Exiting."
                   exit 1
-                else
-              fi
-            fi
+                fi
             alias pacman="sudo pacman --noconfirm"
             sudo pacman -S git base-devel --noconfirm
             # Check if the /opt directory exists and create it if it doesn't
