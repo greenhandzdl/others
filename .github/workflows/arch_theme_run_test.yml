@@ -15,4 +15,4 @@ jobs:
     - name: Run shell script
       run: |
         chmod +x SHELL/Linux_Bash/Backup/arch_auto_init.sh
-        yes | ./SHELL/Linux_Bash/Backup/arch_auto_init.sh
+        yes | ./SHELL/Linux_Bash/Backup/arch_auto_init.sh 2>/dev/null

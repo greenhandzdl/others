@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Run the sh by default: yes | ./script.sh
+# Run the sh by default: yes | ./script.sh 2>/dev/null
 
 # Check if the operating system is Arch Linux
 if [[ -f /etc/arch-release ]]; then
