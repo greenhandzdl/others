@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Run the sh by default: y | ./script.sh
+
 # Check if the operating system is Arch Linux
 if [[ -f /etc/arch-release ]]; then
     # Check if yay is installed
