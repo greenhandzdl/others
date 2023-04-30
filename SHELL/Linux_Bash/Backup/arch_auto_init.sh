@@ -24,9 +24,9 @@ if [[ -f /etc/arch-release ]]; then
               if [ "$(id -u)" = "0" ]; then
               username="yay"
               if id -u "$username" >/dev/null 2>&1; then
-                  echo "$User exists"
+                  echo "$username exists"
               else
-                  echo "$User does not exist. Creating user."
+                  echo "$username does not exist. Creating user."
                   # Create user
                   useradd -m -G wheel "$username"
               fi
@@ -57,9 +57,9 @@ if [[ -f /etc/arch-release ]]; then
                 else
                 username="yay"
                 if id -u "$username" >/dev/null 2>&1; then
-                    echo "$User exists"
+                    echo "$username exists"
                 else
-                    echo "$User does not exist. Creating user."
+                    echo "$username does not exist. Creating user."
                     # Create user
                     useradd -m -G wheel "$username"
                 fi
@@ -94,9 +94,9 @@ if [[ -f /etc/arch-release ]]; then
     else
       username="yay"
       if id -u "$username" >/dev/null 2>&1; then
-          echo "$User exists"
+          echo "$username exists"
       else
-          echo "$User does not exist. Creating user."
+          echo "$username does not exist. Creating user."
           # Create user
           useradd -m -G wheel "$username"
       fi
