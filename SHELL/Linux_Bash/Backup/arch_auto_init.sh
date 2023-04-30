@@ -51,7 +51,7 @@ if [[ -f /etc/arch-release ]]; then
             sudo git clone https://aur.archlinux.org/yay.git
             sudo chown -R $username:users yay
             cd yay
-            ls
+            sudo chmod 777 .
             sudo chown -R $username:users .
             su - $username -c "makepkg -si"
             alias yay ="yay --noconfirm"
@@ -60,7 +60,7 @@ if [[ -f /etc/arch-release ]]; then
 
 
     yay -Syu
-
+    
     # Check if zsh is already installed
     if yay -Qi zsh &> /dev/null; then
         echo "zsh is already installed"
