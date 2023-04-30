@@ -24,12 +24,12 @@ if [[ -f /etc/arch-release ]]; then
             if [ "$(id -u)" = "0" ]; then
               useradd -m -G wheel "$username"
               passwd -d "$username"
-              pacman -y -Syu
+              pacman -Syu
               if pacman -Qs sudo > /dev/null; then
                   echo "sudo is installed."
               else
                   read -p "sudo is not installed. Do you want to install it now? [y/N] " response
-                  if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+                  if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]|| [[ $choice == "default" ]]; then
                       pacman -S -y sudo
                   else
                       echo "Skipping sudo installation."
