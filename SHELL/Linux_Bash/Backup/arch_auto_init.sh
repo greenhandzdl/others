@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Run the sh by default: y | ./script.sh
+# Run the sh by default: yes | ./script.sh
 
 # Check if the operating system is Arch Linux
 if [[ -f /etc/arch-release ]]; then
@@ -55,6 +55,8 @@ if [[ -f /etc/arch-release ]]; then
         if [[ $answer == "y" ]]; then
             yay -S oh-my-zsh-git
         else
+            echo "it won't be installed."
+        fi
     fi
 
     # Check if lolcat command is installed
