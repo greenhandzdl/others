@@ -223,12 +223,13 @@ if [[ -f /etc/arch-release ]]; then
             echo "Installing software..."
             yay -S albert plank-git conky
             #tools
-            yay -S ghostlexly-gpu-video-wallpaper gdm-settings gnome-tweaks-git
+            yay -S ghostlexly-gpu-video-wallpaper gdm-settings gnome-tweaks-git gnome-session-properties
             # theme pack
             yay -S xcursor-genshin-nahida apricity-icons mojave-gtk-theme-git
             #extension
             yay -S gnome-shell-extension-clipboard-indicator compiz gnome-shell-extension-dynamic-panel-transparency-git gnome-shell-extension-simple-system-monitor
-
+            #fonts
+            yay -S 	ttf-mac-fonts
             if [ -f ~/.conkyrc ]; then
                 mv ~/.conkyrc ~/.conkyrc.backup
             fi
@@ -344,6 +345,8 @@ ${voffset 4}${color grey}      Arch: ${color}${execi 600 checkupdates | wc -l}${
     else
         echo "Invalid input. Skipping installation..."
     fi
+
+    yay -Yc
 else
     # Print an error message if the operating system is not Arch Linux
     echo "Unsupported operating system. This script only supports Arch Linux."
