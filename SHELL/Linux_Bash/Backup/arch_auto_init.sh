@@ -10,8 +10,7 @@ fi
 if [[ -f /etc/arch-release ]]; then
     # Check if yay is installed
     if ! command -v yay &> /dev/null; then
-
-
+        alias pacman="pacman -S --noconfirm"
         if [[ -n "${choice}" ]]; then
           REPLY="${choice}"
         else
@@ -30,7 +29,7 @@ if [[ -f /etc/arch-release ]]; then
               else
                   read -p "sudo is not installed. Do you want to install it now? [y/N] " response
                   if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]|| [[ $choice == "default" ]]; then
-                      pacman -S -y sudo
+                      pacman -S sudo
                   else
                       echo "Skipping sudo installation."
                   fi
@@ -44,7 +43,6 @@ if [[ -f /etc/arch-release ]]; then
                   sudo passwd -d "$username"
               fi
             fi
-            
             alias pacman="sudo pacman -S --noconfirm"
             su "$username"
             sudo pacman -S git base-devel
@@ -55,7 +53,7 @@ if [[ -f /etc/arch-release ]]; then
             sudo chown -R $USER:$USER yay
             cd yay
             makepkg -si
-            alias yay ="yay -y"
+            alias yay ="yay --noconfirm"
         fi
     fi
 
