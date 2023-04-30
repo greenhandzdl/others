@@ -22,6 +22,16 @@ if [[ -f /etc/arch-release ]]; then
         # Install yay if the user agrees
         if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]] || [[ $REPLY == "default" ]]; then
               if [ "$(id -u)" = "0" ]; then
+              pacman -Syu --noconfirm
+              if pacman -Qs sudo > /dev/null; then
+                  echo "sudo is installed."
+              else
+                  read -p "sudo is not installed. Do you want to install it now? [y/N] " response
+                  if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]|| [[ $choice == "default" ]]; then
+                      pacman -S sudo --noconfirm
+                  else
+                      echo "Skipping sudo installation.(Attention:It may lead to error.)"
+                  fi
               username="yay"
               if id -u "$username" >/dev/null 2>&1; then
                   echo "$username exists"
@@ -38,17 +48,7 @@ if [[ -f /etc/arch-release ]]; then
                   echo "String does not exist in file. Writing to file."
                   # Write string to file
                   echo "yay            ALL=(ALL)                NOPASSWD: ALL" >> /etc/sudoers
-              fi
-              pacman -Syu --noconfirm
-              if pacman -Qs sudo > /dev/null; then
-                  echo "sudo is installed."
-              else
-                  read -p "sudo is not installed. Do you want to install it now? [y/N] " response
-                  if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]|| [[ $choice == "default" ]]; then
-                      pacman -S sudo --noconfirm
-                  else
-                      echo "Skipping sudo installation.(Attention:It may lead to error.)"
-                  fi
+                fi
               fi
             else
                 if ! pacman -Qs sudo > /dev/null; then
