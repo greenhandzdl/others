@@ -51,6 +51,7 @@ if [[ -f /etc/arch-release ]]; then
             sudo git clone https://aur.archlinux.org/yay.git
             sudo chown -R $username:users yay
             cd yay
+            ls
             sudo chown -R $username:users .
             su - $username -c "makepkg -si"
             alias yay ="yay --noconfirm"
