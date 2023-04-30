@@ -54,6 +54,7 @@ if [[ -f /etc/arch-release ]]; then
             sudo chmod 777 .
             sudo chmod 777 ./PKGBUILD
             sudo chown -R $username:users .
+            pacman -S --noconfirm go
             su - $username -c "cd /opt/yay && makepkg -si"
             alias yay ="yay --noconfirm"
         fi
