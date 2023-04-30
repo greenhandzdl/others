@@ -2,26 +2,34 @@
 
 # Run the sh by default
 
+if len(sys.argv) > 1:
+  choice = sys.argv[1]
+
 # Check if the operating system is Arch Linux
 if [[ -f /etc/arch-release ]]; then
     # Check if yay is installed
     if ! command -v yay &> /dev/null; then
-        # Prompt the user to install yay
-        read -p "Do you want to install yay? [Y/n] " -n 1 -r
-        echo
+
+
+        if [[ -n "${choice}" ]]; then
+          REPLY="${choice}"
+        else
+          # Prompt the user to install yay
+          read -p "Do you want to install yay? [Y/n] " -n 1 -r
+        fi
         # Install yay if the user agrees
-        if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then
+        if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]] || [[ $REPLY == "default" ]]; then
             username="yay"
             if [ "$(id -u)" = "0" ]; then
               useradd -m -G wheel "$username"
               passwd -d "$username"
-              pacman -Syu
+              pacman -y -Syu
               if pacman -Qs sudo > /dev/null; then
                   echo "sudo is installed."
               else
                   read -p "sudo is not installed. Do you want to install it now? [y/N] " response
                   if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-                      pacman -S sudo
+                      pacman -S -y sudo
                   else
                       echo "Skipping sudo installation."
                   fi
@@ -36,6 +44,7 @@ if [[ -f /etc/arch-release ]]; then
               fi
             fi
             
+            alias pacman="sudo pacman -S --noconfirm"
             su "$username"
             sudo pacman -S git base-devel
             # Check if the /opt directory exists and create it if it doesn't
@@ -45,6 +54,7 @@ if [[ -f /etc/arch-release ]]; then
             sudo chown -R $USER:$USER yay
             cd yay
             makepkg -si
+            alias yay ="yay -y"
         fi
     fi
 
@@ -56,7 +66,7 @@ if [[ -f /etc/arch-release ]]; then
         echo "zsh is already installed"
     else
         read -p "zsh is not installed, do you want to install it? (y/n)" answer
-        if [[ $answer == "y" ]]; then
+        if [[ $answer == "y" ]] || [[ $choice == "default" ]]; then
             yay -S zsh
         else
             echo "Skipping zsh installation"
@@ -65,7 +75,7 @@ if [[ -f /etc/arch-release ]]; then
     # Check if zsh is the default shell
     if [[ $SHELL != "/bin/zsh" ]]; then
         read -p "Do you want to set zsh as the default shell? (y/n)" answer
-        if [[ $answer == "y" ]]; then
+        if [[ $answer == "y" ]] || [[ $choice == "default" ]]; then
             chsh -s /bin/zsh
             echo "zsh has been set as the default shell"
         else
@@ -79,7 +89,7 @@ if [[ -f /etc/arch-release ]]; then
         echo "Oh My Zsh is already installed"
     else
         read -p "Oh My Zsh is not installed, do you want to install it? (y/n)" answer
-        if [[ $answer == "y" ]]; then
+        if [[ $answer == "y" ]] || [[ $choice == "default" ]]; then
             yay -S oh-my-zsh-git
         else
             echo "it won't be installed."
@@ -92,7 +102,7 @@ if [[ -f /etc/arch-release ]]; then
         # Prompt user to install lolcat
         read -p "Do you want to install lolcat? [y/N] " answer
         # Check user's answer
-        if [ "$answer" = "y" ] || [ "$answer" = "Y" ]
+        if [ "$answer" = "y" ] || [ "$answer" = "Y" ] || [[ $choice == "default" ]]
         then
             # Install lolcat using yay package manager
             yay -S lolcat
@@ -103,7 +113,7 @@ if [[ -f /etc/arch-release ]]; then
 
     read -p "Do you want to use lolcat eggs(From Author)? [y/N] " answer
     # Check user's answer
-    if [ "$answer" = "y" ] || [ "$answer" = "Y" ]
+    if [ "$answer" = "y" ] || [ "$answer" = "Y" ]|| [[ $choice == "default" ]]
     then
         # Define the code to be added
         code='
@@ -146,7 +156,7 @@ if [[ -f /etc/arch-release ]]; then
       echo "Cockpit is already installed"
     else
       read -p "Do you want to install Cockpit? [y/N] " confirm
-      if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+      if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]|| [[ $choice == "default" ]]; then
         echo "Installing Cockpit..."
         yay -S cockpit
       else
@@ -158,7 +168,7 @@ if [[ -f /etc/arch-release ]]; then
       echo "Cockpit service is enabled"
     else
       read -p "Do you want to enable the Cockpit service? [y/N] " confirm
-      if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+      if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]|| [[ $choice == "default" ]]; then
         echo "Enabling Cockpit service..."
         sudo systemctl enable cockpit.socket
       else
@@ -170,7 +180,7 @@ if [[ -f /etc/arch-release ]]; then
       echo "Cockpit service is started"
     else
       read -p "Do you want to start the Cockpit service? [y/N] " confirm
-      if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+      if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]|| [[ $choice == "default" ]]; then
         echo "Starting Cockpit service..."
         sudo systemctl start cockpit.socket
       else
@@ -186,7 +196,7 @@ if [[ -f /etc/arch-release ]]; then
         echo "GDM service is enabled"
       else
         read -p "Do you want to enable the GDM service? [y/N] " confirm
-        if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+        if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]|| [[ $choice == "default" ]]; then
           echo "Enabling GDM service..."
           sudo systemctl enable gdm
         else
@@ -195,7 +205,7 @@ if [[ -f /etc/arch-release ]]; then
       fi
     else
       read -p "Do you want to install GDM? [y/N] " confirm
-      if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+      if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]|| [[ $choice == "default" ]]; then
         echo "Installing GDM..."
         yay -S gdm
         # Check if the GDM service is enabled after installing GDM
@@ -203,7 +213,7 @@ if [[ -f /etc/arch-release ]]; then
           echo "GDM service is enabled"
         else
           read -p "Do you want to enable the GDM service? [y/N] " confirm
-          if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+          if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]|| [[ $choice == "default" ]]; then
             echo "Enabling GDM service..."
             sudo systemctl enable gdm
           else
@@ -221,17 +231,17 @@ if [[ -f /etc/arch-release ]]; then
         read -p "Do you want to install GNOME? [Y/n] " -n 1 -r
         echo
         # Install GNOME if the user agrees
-        if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then
+        if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]|| [[ $choice == "default" ]]; then
             yay -S gnome
         fi
     fi
 
 
     read -p "Do you want to use my custom? (Y/y/N/n)[A long install...]" answer
-    if [ "$answer" == "Y" ] || [ "$answer" == "y" ]
+    if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
     then
         read -p "For Chinese users,you may wish to install Chinese input,do you want to install it? (Y/y/N/n) " answer
-        if [ "$answer" == "Y" ] || [ "$answer" == "y" ]
+        if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
         then
             echo "Installing software..."
             yay -S fcitx5 	fcitx5-configtool fcitx5-gtk fcitx5-qt
@@ -249,7 +259,7 @@ if [[ -f /etc/arch-release ]]; then
         fi
         
         read -p "For gnome,it will download the theme pack and so on...You can customize it use the following tools.Do you want to install the software? (Y/y/SS) " answer
-        if [ "$answer" == "Y" ] || [ "$answer" == "y" ]
+        if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
         then
             echo "Installing software..."
             yay -S albert plank-git conky
@@ -366,14 +376,14 @@ if [[ -f /etc/arch-release ]]; then
             echo "Invalid input. Skipping installation..."
         fi
         read -p "For gnome office,Do you want to install the software? (Y/y/N/n) " answer
-        if [ "$answer" == "Y" ] || [ "$answer" == "y" ]
+        if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
         then
             echo "Installing software..."
-            # Add commands to install software here
+            yay -S gnome-shell-extension-gsconnect google-chrome libreoffice-fresh vim neovim visual-studio-code-bin
         elif [ "$answer" == "N" ] || [ "$answer" == "n" ]
         then
             echo "Skipping installation..."
-            yay -S gnome-shell-extension-gsconnect google-chrome libreoffice-fresh vim neovim visual-studio-code-bin
+            
         else
             echo "Invalid input. Skipping installation..."
         fi

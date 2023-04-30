@@ -15,8 +15,4 @@ jobs:
     - name: Run shell script
       run: |
         chmod +x SHELL/Linux_Bash/Backup/arch_auto_init.sh
-        nohup bash -c 'yes | ./SHELL/Linux_Bash/Backup/arch_auto_init.sh 2>&1 | grep -vE "bash: line [0-9]+: y: command not found" > ./output.log' &
-        while [ -n "$(ps aux | grep '[S]HELL/Linux_Bash/Backup/arch_auto_init.sh')" ]; do
-            sleep 10
-            cat ./output.log
-        done
+        ./SHELL/Linux_Bash/Backup/arch_auto_init.sh default
