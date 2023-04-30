@@ -23,7 +23,7 @@ if [[ -f /etc/arch-release ]]; then
             if [ "$(id -u)" = "0" ]; then
               useradd -m -G wheel "$username"
               passwd -d "$username"
-              pacman -Syu
+              pacman -Syu --noconfirm
               if pacman -Qs sudo > /dev/null; then
                   echo "sudo is installed."
               else
