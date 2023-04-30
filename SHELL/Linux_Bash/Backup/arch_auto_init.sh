@@ -44,7 +44,6 @@ if [[ -f /etc/arch-release ]]; then
               fi
             fi
             alias pacman="sudo pacman --noconfirm"
-            sudo su yay ~
             sudo pacman -S git base-devel --noconfirm
             # Check if the /opt directory exists and create it if it doesn't
             [ ! -d /opt ] && sudo mkdir /opt
@@ -53,13 +52,12 @@ if [[ -f /etc/arch-release ]]; then
             sudo chown -R $username:users yay
             cd yay
             sudo chown -R $username:users .
-            whoami
-            makepkg -si
+            su - $username -c "makepkg -si"
             alias yay ="yay --noconfirm"
         fi
     fi
 
-    su yay
+
     yay -Syu
 
     # Check if zsh is already installed
