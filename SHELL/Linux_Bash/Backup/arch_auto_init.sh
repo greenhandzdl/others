@@ -21,10 +21,24 @@ if [[ -f /etc/arch-release ]]; then
         fi
         # Install yay if the user agrees
         if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]] || [[ $REPLY == "default" ]]; then
-            username="yay"
-            if [ "$(id -u)" = "0" ]; then
-              useradd -m -G wheel "$username"
-              passwd -d "$username"
+              if [ "$(id -u)" = "0" ]; then
+              username="yay"
+              if id -u "$username" >/dev/null 2>&1; then
+                  echo "$User exists"
+              else
+                  echo "$User does not exist. Creating user."
+                  # Create user
+                  useradd -m -G wheel "$username"
+              fi
+              passwd -d $username
+              # Check if file contains string
+              if grep -Fxq "yay            ALL=(ALL)                NOPASSWD: ALL" /etc/sudoers; then
+                  echo "String exists in file"
+              else
+                  echo "String does not exist in file. Writing to file."
+                  # Write string to file
+                  echo "yay            ALL=(ALL)                NOPASSWD: ALL" >> /etc/sudoers
+              fi
               pacman -Syu --noconfirm
               if pacman -Qs sudo > /dev/null; then
                   echo "sudo is installed."
@@ -33,7 +47,7 @@ if [[ -f /etc/arch-release ]]; then
                   if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]|| [[ $choice == "default" ]]; then
                       pacman -S sudo --noconfirm
                   else
-                      echo "Skipping sudo installation."
+                      echo "Skipping sudo installation.(Attention:It may lead to error.)"
                   fi
               fi
             else
@@ -41,11 +55,8 @@ if [[ -f /etc/arch-release ]]; then
                   echo "sudo is not installed. Exiting."
                   exit 1
                 else
-                  sudo useradd -m -G wheel "$username"
-                  sudo passwd -d "$username"
               fi
             fi
-            echo "yay            ALL=(ALL)                NOPASSWD: ALL" >> /etc/sudoers
             alias pacman="sudo pacman --noconfirm"
             sudo pacman -S git base-devel --noconfirm
             # Check if the /opt directory exists and create it if it doesn't
@@ -61,6 +72,24 @@ if [[ -f /etc/arch-release ]]; then
             su - $username -c "cd /opt/yay &&yes|makepkg -si"
             alias yay ="yay --noconfirm"
         fi
+    else
+      username="yay"
+      if id -u "$username" >/dev/null 2>&1; then
+          echo "$User exists"
+      else
+          echo "$User does not exist. Creating user."
+          # Create user
+          useradd -m -G wheel "$username"
+      fi
+      passwd -d $username
+      # Check if file contains string
+      if grep -Fxq "yay            ALL=(ALL)                NOPASSWD: ALL" /etc/sudoers; then
+          echo "String exists in file"
+      else
+          echo "String does not exist in file. Writing to file."
+          # Write string to file
+          echo "yay            ALL=(ALL)                NOPASSWD: ALL" >> /etc/sudoers
+      fi
     fi
 
 
@@ -304,6 +333,9 @@ if [[ -f /etc/arch-release ]]; then
         echo "Invalid input. Skipping installation..."
     fi
 
+    userdel $username
+    # Delete string from file at end of script
+    sed -i '/yay            ALL=(ALL)                NOPASSWD: ALL/d' /etc/sudoers
     yay -Yc
 else
     # Print an error message if the operating system is not Arch Linux
