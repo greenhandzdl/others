@@ -11,9 +11,32 @@ if [[ -f /etc/arch-release ]]; then
         echo
         # Install yay if the user agrees
         if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then
-            whoami #For test
-            pacman -Syu
-            pacman -S sudo
+            username="yay"
+            if [ "$(id -u)" = "0" ]; then
+              useradd -m -G wheel "$username"
+              passwd -d "$username"
+              pacman -Syu
+              if pacman -Qs sudo > /dev/null; then
+                  echo "sudo is installed."
+              else
+                  read -p "sudo is not installed. Do you want to install it now? [y/N] " response
+                  if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+                      pacman -S sudo
+                  else
+                      echo "Skipping sudo installation."
+                  fi
+              fi
+            else
+                if ! pacman -Qs sudo > /dev/null; then
+                  echo "sudo is not installed. Exiting."
+                  exit 1
+                else
+                  sudo useradd -m -G wheel "$username"
+                  sudo passwd -d "$username"
+              fi
+            fi
+            
+            su "$username"
             sudo pacman -S git base-devel
             # Check if the /opt directory exists and create it if it doesn't
             [ ! -d /opt ] && sudo mkdir /opt
@@ -25,6 +48,7 @@ if [[ -f /etc/arch-release ]]; then
         fi
     fi
 
+    su yay
     yay -Syu
 
     # Check if zsh is already installed
