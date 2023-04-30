@@ -10,7 +10,7 @@ fi
 if [[ -f /etc/arch-release ]]; then
     # Check if yay is installed
     if ! command -v yay &> /dev/null; then
-        alias pacman="Yes|pacman -S"
+        alias pacman="pacman --noconfirm"
         if [[ -n "${choice}" ]]; then
           REPLY="${choice}"
         else
@@ -43,7 +43,7 @@ if [[ -f /etc/arch-release ]]; then
                   sudo passwd -d "$username"
               fi
             fi
-            alias pacman="Yes|sudo pacman -S"
+            alias pacman="sudo pacman --noconfirm"
             su "$username"
             sudo pacman -S git base-devel
             # Check if the /opt directory exists and create it if it doesn't
@@ -53,7 +53,7 @@ if [[ -f /etc/arch-release ]]; then
             sudo chown -R $USER:$USER yay
             cd yay
             makepkg -si
-            alias yay ="Yes|yay"
+            alias yay ="yay --noconfirm"
         fi
     fi
 
