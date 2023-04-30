@@ -50,8 +50,10 @@ if [[ -f /etc/arch-release ]]; then
             [ ! -d /opt ] && sudo mkdir /opt
             cd /opt
             sudo git clone https://aur.archlinux.org/yay.git
-            sudo chown -R $USER:$USER yay
+            sudo chown -R $username:users yay
             cd yay
+            sudo chown -R $username:users .
+            whoami
             makepkg -si
             alias yay ="yay --noconfirm"
         fi
