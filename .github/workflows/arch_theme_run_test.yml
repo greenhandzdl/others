@@ -14,5 +14,6 @@ jobs:
 
     - name: Run shell script
       run: |
+        pwd 
         chmod +x SHELL/Linux_Bash/Backup/arch_auto_init.sh
         ./SHELL/Linux_Bash/Backup/arch_auto_init.sh default

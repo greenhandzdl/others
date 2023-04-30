@@ -43,7 +43,6 @@ if [[ -f /etc/arch-release ]]; then
                   sudo passwd -d "$username"
               fi
             fi
-            pwd
             echo "yay            ALL=(ALL)                NOPASSWD: ALL" >> /etc/sudoers
             alias pacman="sudo pacman --noconfirm"
             sudo pacman -S git base-devel --noconfirm
@@ -57,7 +56,7 @@ if [[ -f /etc/arch-release ]]; then
             sudo chmod 777 ./PKGBUILD
             sudo chown -R $username:users .
             pacman -S --noconfirm go
-            su - $username -c "cd /opt/yay && makepkg -si"
+            su - $username -c "cd /opt/yay &&yes|makepkg -si"
             alias yay ="yay --noconfirm"
         fi
     fi
