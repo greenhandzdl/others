@@ -44,7 +44,7 @@ if [[ -f /etc/arch-release ]]; then
               fi
             fi
             alias pacman="sudo pacman --noconfirm"
-            su "$username"
+            sudo su yay ~
             sudo pacman -S git base-devel --noconfirm
             # Check if the /opt directory exists and create it if it doesn't
             [ ! -d /opt ] && sudo mkdir /opt
