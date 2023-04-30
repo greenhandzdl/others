@@ -2,8 +2,9 @@
 
 # Run the sh by default
 
-if len(sys.argv) > 1:
-  choice = sys.argv[1]
+if [ $# -gt 0 ]; then
+  choice=$1
+fi
 
 # Check if the operating system is Arch Linux
 if [[ -f /etc/arch-release ]]; then
