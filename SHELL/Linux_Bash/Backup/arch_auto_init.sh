@@ -212,7 +212,7 @@ if [[ -f /etc/arch-release ]]; then
       read -p "Do you want to install GDM? [y/N] " confirm
       if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]|| [[ $choice == "default" ]]; then
         echo "Installing GDM..."
-        su - $username -c yay -S gdm --noconfirm
+        su - $username -c "yay -S gdm --noconfirm"
         # Check if the GDM service is enabled after installing GDM
         if systemctl is-enabled gdm > /dev/null ; then
           echo "GDM service is enabled"
@@ -236,7 +236,7 @@ if [[ -f /etc/arch-release ]]; then
         read -p "Do you want to install GNOME? [Y/n] " -n 1 -r
         # Install GNOME if the user agrees
         if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]|| [[ $choice == "default" ]]; then
-            su - $username -c yay -S gnome --noconfirm
+            su - $username -c "yay -S gnome --noconfirm"
         fi
     fi
 
@@ -248,12 +248,12 @@ if [[ -f /etc/arch-release ]]; then
         if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
         then
             echo "Installing software..."
-            su - $username -c yay -S --noconfirm fcitx5 	fcitx5-configtool fcitx5-gtk fcitx5-qt
-            su - $username -c yay -S --noconfirm fcitx5-chewing fcitx5-chinese-addons fcitx5-rime fcitx5-mcbopomofo-git  fcitx5-anthy  fcitx5-kkc fcitx5-mozc fcitx5-skk
-            su - $username -c yay -S --noconfirm fcitx5-input-support fcitx5-pinyin-zhwiki fcitx5-pinyin-sougou
-            su - $username -c yay -S --noconfirm fcitx5-pinyin-moegirl-rime cedict fcitx5-pinyin-moegirl libime
-            su - $username -c yay -S --noconfirm fcitx5-skin-zhuobihaotian-luotianyi
-            su - $username -c yay -S --noconfirm kimpanel
+            su - $username -c "yay -S --noconfirm fcitx5 	fcitx5-configtool fcitx5-gtk fcitx5-qt"
+            su - $username -c "yay -S --noconfirm fcitx5-chewing fcitx5-chinese-addons fcitx5-rime fcitx5-mcbopomofo-git  fcitx5-anthy  fcitx5-kkc fcitx5-mozc fcitx5-skk"
+            su - $username -c "yay -S --noconfirm fcitx5-input-support fcitx5-pinyin-zhwiki fcitx5-pinyin-sougou"
+            su - $username -c "yay -S --noconfirm fcitx5-pinyin-moegirl-rime cedict fcitx5-pinyin-moegirl libime"
+            su - $username -c "yay -S --noconfirm fcitx5-skin-zhuobihaotian-luotianyi"
+            su - $username -c "yay -S --noconfirm kimpanel"
             # Add commands to install software here
         elif [ "$answer" == "N" ] || [ "$answer" == "n" ]
         then
@@ -266,15 +266,15 @@ if [[ -f /etc/arch-release ]]; then
         if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
         then
             echo "Installing software..."
-            su - $username -c yay -S --noconfirm albert plank-git conky
+            su - $username -c "yay -S --noconfirm albert plank-git conky"
             #tools
-            su - $username -c yay -S --noconfirm ghostlexly-gpu-video-wallpaper gdm-settings gnome-tweaks-git gnome-session-properties
+            su - $username -c "yay -S --noconfirm ghostlexly-gpu-video-wallpaper gdm-settings gnome-tweaks-git gnome-session-properties"
             # theme pack
-            su - $username -c yay -S --noconfirm xcursor-genshin-nahida apricity-icons mojave-gtk-theme-git
+            su - $username -c "yay -S --noconfirm xcursor-genshin-nahida apricity-icons mojave-gtk-theme-git"
             #extension
-            su - $username -c yay -S --noconfirm gnome-shell-extension-clipboard-indicator compiz gnome-shell-extension-dynamic-panel-transparency-git gnome-shell-extension-simple-system-monitor
+            su - $username -c "yay -S --noconfirm gnome-shell-extension-clipboard-indicator compiz gnome-shell-extension-dynamic-panel-transparency-git gnome-shell-extension-simple-system-monitor"
             #fonts
-            su - $username -c yay -S --noconfirm 	ttf-mac-fonts
+            su - $username -c "yay -S --noconfirm 	ttf-mac-fonts"
             if [ -f ~/.conkyrc ]; then
                 mv ~/.conkyrc ~/.conkyrc.backup
             fi
@@ -289,7 +289,7 @@ if [[ -f /etc/arch-release ]]; then
         if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
         then
             echo "Installing software..."
-            su - $username -c yay -S --noconfirm gnome-shell-extension-gsconnect google-chrome libreoffice-fresh vim neovim visual-studio-code-bin
+            su - $username -c "yay -S --noconfirm gnome-shell-extension-gsconnect google-chrome libreoffice-fresh vim neovim visual-studio-code-bin"
         elif [ "$answer" == "N" ] || [ "$answer" == "n" ]
         then
             echo "Skipping installation..."
