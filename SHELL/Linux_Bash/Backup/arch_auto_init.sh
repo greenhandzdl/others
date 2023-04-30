@@ -54,7 +54,27 @@ if [[ -f /etc/arch-release ]]; then
                 if ! pacman -Qs sudo > /dev/null; then
                   echo "sudo is not installed. Exiting."
                   exit 1
+                else
+                username="yay"
+                if id -u "$username" >/dev/null 2>&1; then
+                    echo "$User exists"
+                else
+                    echo "$User does not exist. Creating user."
+                    # Create user
+                    useradd -m -G wheel "$username"
                 fi
+                passwd -d $username
+                # Check if file contains string
+                if grep -Fxq "yay            ALL=(ALL)                NOPASSWD: ALL" /etc/sudoers; then
+                    echo "String exists in file"
+                else
+                    echo "String does not exist in file. Writing to file."
+                    # Write string to file
+                    echo "yay            ALL=(ALL)                NOPASSWD: ALL" >> /etc/sudoers
+                fi
+                pacman -Syu --noconfirm
+              fi
+            fi
             alias pacman="sudo pacman --noconfirm"
             sudo pacman -S git base-devel --noconfirm
             # Check if the /opt directory exists and create it if it doesn't
