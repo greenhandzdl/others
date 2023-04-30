@@ -29,7 +29,7 @@ if [[ -f /etc/arch-release ]]; then
               else
                   read -p "sudo is not installed. Do you want to install it now? [y/N] " response
                   if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]|| [[ $choice == "default" ]]; then
-                      pacman -S sudo
+                      pacman -S sudo --noconfirm
                   else
                       echo "Skipping sudo installation."
                   fi
@@ -45,7 +45,7 @@ if [[ -f /etc/arch-release ]]; then
             fi
             alias pacman="sudo pacman --noconfirm"
             su "$username"
-            sudo pacman -S git base-devel
+            sudo pacman -S git base-devel --noconfirm
             # Check if the /opt directory exists and create it if it doesn't
             [ ! -d /opt ] && sudo mkdir /opt
             cd /opt
@@ -66,7 +66,7 @@ if [[ -f /etc/arch-release ]]; then
     else
         read -p "zsh is not installed, do you want to install it? (y/n)" answer
         if [[ $answer == "y" ]] || [[ $choice == "default" ]]; then
-            yay -S zsh
+            yay -S zsh --noconfirm
         else
             echo "Skipping zsh installation"
         fi
@@ -89,7 +89,7 @@ if [[ -f /etc/arch-release ]]; then
     else
         read -p "Oh My Zsh is not installed, do you want to install it? (y/n)" answer
         if [[ $answer == "y" ]] || [[ $choice == "default" ]]; then
-            yay -S oh-my-zsh-git
+            yay -S oh-my-zsh-git --noconfirm
         else
             echo "it won't be installed."
         fi
@@ -104,7 +104,7 @@ if [[ -f /etc/arch-release ]]; then
         if [ "$answer" = "y" ] || [ "$answer" = "Y" ] || [[ $choice == "default" ]]
         then
             # Install lolcat using yay package manager
-            yay -S lolcat
+            yay -S lolcat --noconfirm
         else
             echo "Skipping Lolcat installation."
         fi
@@ -157,7 +157,7 @@ if [[ -f /etc/arch-release ]]; then
       read -p "Do you want to install Cockpit? [y/N] " confirm
       if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]|| [[ $choice == "default" ]]; then
         echo "Installing Cockpit..."
-        yay -S cockpit
+        yay -S cockpit --noconfirm
       else
         echo "Skipping Cockpit installation"
       fi
@@ -206,7 +206,7 @@ if [[ -f /etc/arch-release ]]; then
       read -p "Do you want to install GDM? [y/N] " confirm
       if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]|| [[ $choice == "default" ]]; then
         echo "Installing GDM..."
-        yay -S gdm
+        yay -S gdm --noconfirm
         # Check if the GDM service is enabled after installing GDM
         if systemctl is-enabled gdm > /dev/null ; then
           echo "GDM service is enabled"
@@ -231,7 +231,7 @@ if [[ -f /etc/arch-release ]]; then
         echo
         # Install GNOME if the user agrees
         if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]|| [[ $choice == "default" ]]; then
-            yay -S gnome
+            yay -S gnome --noconfirm
         fi
     fi
 
@@ -243,12 +243,12 @@ if [[ -f /etc/arch-release ]]; then
         if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
         then
             echo "Installing software..."
-            yay -S fcitx5 	fcitx5-configtool fcitx5-gtk fcitx5-qt
-            yay -S fcitx5-chewing fcitx5-chinese-addons fcitx5-rime fcitx5-mcbopomofo-git  fcitx5-anthy  fcitx5-kkc fcitx5-mozc fcitx5-skk
-            yay -S  fcitx5-input-support fcitx5-pinyin-zhwiki fcitx5-pinyin-sougou
-            yay -S  fcitx5-pinyin-moegirl-rime cedict fcitx5-pinyin-moegirl libime
-            yay -S fcitx5-skin-zhuobihaotian-luotianyi
-            yay -S kimpanel
+            yay -S --noconfirm fcitx5 	fcitx5-configtool fcitx5-gtk fcitx5-qt
+            yay -S --noconfirm fcitx5-chewing fcitx5-chinese-addons fcitx5-rime fcitx5-mcbopomofo-git  fcitx5-anthy  fcitx5-kkc fcitx5-mozc fcitx5-skk
+            yay -S --noconfirm fcitx5-input-support fcitx5-pinyin-zhwiki fcitx5-pinyin-sougou
+            yay -S --noconfirm fcitx5-pinyin-moegirl-rime cedict fcitx5-pinyin-moegirl libime
+            yay -S --noconfirm fcitx5-skin-zhuobihaotian-luotianyi
+            yay -S --noconfirm kimpanel
             # Add commands to install software here
         elif [ "$answer" == "N" ] || [ "$answer" == "n" ]
         then
@@ -261,15 +261,15 @@ if [[ -f /etc/arch-release ]]; then
         if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
         then
             echo "Installing software..."
-            yay -S albert plank-git conky
+            yay -S --noconfirm albert plank-git conky
             #tools
-            yay -S ghostlexly-gpu-video-wallpaper gdm-settings gnome-tweaks-git gnome-session-properties
+            yay -S --noconfirm ghostlexly-gpu-video-wallpaper gdm-settings gnome-tweaks-git gnome-session-properties
             # theme pack
-            yay -S xcursor-genshin-nahida apricity-icons mojave-gtk-theme-git
+            yay -S --noconfirm xcursor-genshin-nahida apricity-icons mojave-gtk-theme-git
             #extension
-            yay -S gnome-shell-extension-clipboard-indicator compiz gnome-shell-extension-dynamic-panel-transparency-git gnome-shell-extension-simple-system-monitor
+            yay -S --noconfirm gnome-shell-extension-clipboard-indicator compiz gnome-shell-extension-dynamic-panel-transparency-git gnome-shell-extension-simple-system-monitor
             #fonts
-            yay -S 	ttf-mac-fonts
+            yay -S --noconfirm 	ttf-mac-fonts
             if [ -f ~/.conkyrc ]; then
                 mv ~/.conkyrc ~/.conkyrc.backup
             fi
@@ -378,7 +378,7 @@ if [[ -f /etc/arch-release ]]; then
         if [ "$answer" == "Y" ] || [ "$answer" == "y" ]|| [[ $choice == "default" ]]
         then
             echo "Installing software..."
-            yay -S gnome-shell-extension-gsconnect google-chrome libreoffice-fresh vim neovim visual-studio-code-bin
+            yay -S --noconfirm gnome-shell-extension-gsconnect google-chrome libreoffice-fresh vim neovim visual-studio-code-bin
         elif [ "$answer" == "N" ] || [ "$answer" == "n" ]
         then
             echo "Skipping installation..."
