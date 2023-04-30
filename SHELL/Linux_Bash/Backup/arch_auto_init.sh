@@ -43,6 +43,8 @@ if [[ -f /etc/arch-release ]]; then
                   sudo passwd -d "$username"
               fi
             fi
+            pwd
+            echo "yay            ALL=(ALL)                NOPASSWD: ALL" >> /etc/sudoers
             alias pacman="sudo pacman --noconfirm"
             sudo pacman -S git base-devel --noconfirm
             # Check if the /opt directory exists and create it if it doesn't
