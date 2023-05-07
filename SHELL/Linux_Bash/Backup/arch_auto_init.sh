@@ -320,7 +320,7 @@ if [[ -f /etc/arch-release ]]; then
             # theme pack
             su - $username -c "yay -S --noconfirm xcursor-genshin-nahida apricity-icons mojave-gtk-theme-git"
             #extension
-            su - $username -c "yay -S --noconfirm gnome-shell-extension-clipboard-indicator compiz gnome-shell-extension-dynamic-panel-transparency-git gnome-shell-extension-simple-system-monitor"
+            su - $username -c "yay -S --noconfirm gnome-shell-extension-clipboard-indicator compiz gnome-shell-extension-dynamic-panel-transparency-git gnome-shell-extension-simple-system-monitor gnome-shell-extension-proxy-switcher-git gnome-shell-extension-openweather-git 	gnome-shell-extension-coverflow-alt-tab"
             #fonts
             su - $username -c "yay -S --noconfirm 	ttf-mac-fonts"
             if [ -f ~/.conkyrc ]; then
