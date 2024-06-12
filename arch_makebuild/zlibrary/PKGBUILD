@@ -1,0 +1,20 @@
+# Maintainer: greenhandzdl
+# Contributor: Arch User Repository
+
+pkgname=zlibrary
+pkgver=latest
+pkgrel=1
+pkgdesc="Z-lib(the latest one)"
+url="https://go-to-library.sk"
+license=('GPL')
+arch=('x86_64')
+depends=('glibc' 'libx11' 'libxcb' 'libxau' 'libxdmcp')
+
+source=(https://go-to-library.sk/soft/zlibrary-setup-latest.deb)
+sha256sums=('d3d6c845fafd3a16bd1cb28451bfa8295767c6942fb0449930ee51db54b94c7f')
+
+package() {
+    cd "$srcdir"
+    ar x zlibrary-setup-$pkgver.deb
+    tar xf data.tar.xz -C "$pkgdir/"
+}
