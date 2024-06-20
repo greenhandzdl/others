@@ -10,16 +10,18 @@ import time
 import threading
 import logging
 
-# 要扫描的目录列表
+# 要扫描的目录列表，排除 /proc 和 /sys
 directories = [
     "bin", "dev", "home", "lib64", "opt", "root", "sbin", ".snapshots",
-    "sys", "usr", "boot", "etc", "lib", "mnt", "proc", "run", "snap", "srv",
+    "usr", "boot", "etc", "lib", "mnt", "run", "snap", "srv",
     "tmp", "var"
 ]
 
 base_path = "/"
 clamav_cmd = "clamscan"
 update_cmd = "freshclam"
+max_threads = 14  # 最大并行线程数，根据系统资源调整
+max_retries = 5  # 扫描失败重试次数
 
 # 设置日志记录
 logging.basicConfig(filename='scan.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -27,7 +29,7 @@ logging.basicConfig(filename='scan.log', level=logging.INFO, format='%(asctime)s
 def update_virus_database():
     print("正在更新病毒数据库...")
     logging.info("正在更新病毒数据库...")
-    result = subprocess.run([update_cmd], capture_output=True, text=True)
+    result = subprocess.run(['sudo', update_cmd], capture_output=True, text=True)
     if result.stdout:
         print(result.stdout)
         logging.info(result.stdout)
@@ -35,42 +37,55 @@ def update_virus_database():
         print(f"更新时发生错误: {result.stderr}")
         logging.error(f"更新时发生错误: {result.stderr}")
     if result.returncode != 0:
-        print("尝试使用 sudo 运行 freshclam...")
-        result = subprocess.run(['sudo', update_cmd], capture_output=True, text=True)
-        if result.stdout:
-            print(result.stdout)
-            logging.info(result.stdout)
-        if result.stderr:
-            print(f"使用 sudo 更新时发生错误: {result.stderr}")
-            logging.error(f"使用 sudo 更新时发生错误: {result.stderr}")
-    print("病毒数据库更新完成。")
-    logging.info("病毒数据库更新完成。")
+        print("病毒数据库更新失败。")
+        logging.error("病毒数据库更新失败。")
+    else:
+        print("病毒数据库更新完成。")
+        logging.info("病毒数据库更新完成。")
 
-def scan_directory(directory, progress_bar):
+def scan_directory(directory, progress_bar, retry_count=0):
     path = os.path.join(base_path, directory)
     log_file = f"{directory}_scan.log"
     start_time = time.time()
 
     try:
-        result = subprocess.run([clamav_cmd, "-r", "--remove", path, "--log", log_file], capture_output=True, text=True)
+        result = subprocess.run(['sudo', clamav_cmd, "-r", "--remove=yes", "--exclude-dir=/proc", "--exclude-dir=/sys", path, "--log", log_file], capture_output=True, text=True)
         progress_bar.set_description(f"正在扫描 {directory}")
         logging.info(f"开始扫描 {directory}")
-        
-        # 解析日志文件以获取进度信息
-        with open(log_file, 'r') as log:
-            lines = log.readlines()
-            total_files = len(lines)
-            for i, line in enumerate(lines):
-                progress_bar.set_description(f"正在扫描 {directory} ({i+1}/{total_files})")
-                time.sleep(0.01)  # 模拟读取和处理日志文件的延迟
 
+        if result.stdout:
+            logging.info(result.stdout)
         if result.stderr:
-            print(f"扫描 {directory} 时发生错误: {result.stderr}")
-            logging.error(f"扫描 {directory} 时发生错误: {result.stderr}")
-    
+            # 处理权限不足的警告
+            if "Permission denied" in result.stderr:
+                print(f"扫描 {directory} 时发生权限不足错误: {result.stderr}")
+                logging.warning(f"扫描 {directory} 时发生权限不足错误: {result.stderr}")
+            else:
+                print(f"扫描 {directory} 时发生错误: {result.stderr}")
+                logging.error(f"扫描 {directory} 时发生错误: {result.stderr}")
+
+        # 修改日志文件权限
+        subprocess.run(['sudo', 'chown', f'{os.getuid()}:{os.getgid()}', log_file])
+        subprocess.run(['sudo', 'chmod', '777', log_file])  # 设置权限为777
+
+        # 检查扫描结果并解析日志文件
+        with open(log_file, 'r') as log:
+            log_content = log.read()
+            if "Infected files: 0" not in log_content:
+                if "Not removed: 0" not in log_content:
+                    not_removed_files = []
+                    for line in log_content.split('\n'):
+                        if "Not removed:" in line:
+                            not_removed_files.append(line)
+                    logging.warning(f"扫描 {directory} 发现未能删除的文件: {not_removed_files}")
+                    print(f"扫描 {directory} 发现未能删除的文件: {not_removed_files}")
+
     except Exception as e:
         print(f"扫描 {path} 时发生异常: {e}")
         logging.error(f"扫描 {path} 时发生异常: {e}")
+        if retry_count < max_retries:
+            logging.info(f"重新尝试扫描 {directory}，第 {retry_count + 1} 次")
+            scan_directory(directory, progress_bar, retry_count + 1)
     finally:
         progress_bar.update(1)
         end_time = time.time()
@@ -93,27 +108,27 @@ def main():
     stop_event = threading.Event()
 
     # 使用 ThreadPoolExecutor 实现多线程
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
         futures = []
         progress_bar = tqdm(total=len(directories))
-        
+
         for directory in directories:
             futures.append(executor.submit(scan_directory, directory, progress_bar))
-        
+
         system_monitor_thread = executor.submit(display_system_usage, stop_event)
-        
+
         for future in concurrent.futures.as_completed(futures):
             try:
                 future.result()
             except Exception as exc:
                 print(f"扫描时发生异常: {exc}")
                 logging.error(f"扫描时发生异常: {exc}")
-        
+
         # 停止系统监控线程
         stop_event.set()
         system_monitor_thread.result()  # 确保系统监控线程退出
         progress_bar.close()
-    
+
     print("\n扫描完成。")
     logging.info("扫描完成。")
 
