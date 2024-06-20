@@ -1,6 +1,5 @@
 # 作者：greenhandzdl
 # 使用说明：利用clamav多进程扫描全盘（建议：使用单独的文件夹方便查看日志）
-
 import os
 import subprocess
 import concurrent.futures
@@ -10,10 +9,10 @@ import time
 import threading
 import logging
 
-# 要扫描的目录列表，排除 /proc 和 /sys
+# 要扫描的目录列表
 directories = [
     "bin", "dev", "home", "lib64", "opt", "root", "sbin", ".snapshots",
-    "usr", "boot", "etc", "lib", "mnt", "run", "snap", "srv",
+    "sys", "usr", "boot", "etc", "lib", "mnt", "proc", "run", "snap", "srv",
     "tmp", "var"
 ]
 
