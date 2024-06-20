@@ -12,15 +12,15 @@ import logging
 # 要扫描的目录列表
 directories = [
     "bin", "dev", "home", "lib64", "opt", "root", "sbin", ".snapshots",
-    "sys", "usr", "boot", "etc", "lib", "mnt", "proc", "run", "snap", "srv",
-    "tmp", "var"
+    "usr", "boot", "etc", "lib", "mnt", "run", "snap", "srv",
+    "tmp", "var", "proc", "sys"
 ]
 
 base_path = "/"
 clamav_cmd = "clamscan"
 update_cmd = "freshclam"
-max_threads = 14  # 最大并行线程数，根据系统资源调整
-max_retries = 5  # 扫描失败重试次数
+max_threads = 8  # 最大并行线程数，根据系统资源调整
+max_retries = 3  # 扫描失败重试次数
 
 # 设置日志记录
 logging.basicConfig(filename='scan.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -48,7 +48,7 @@ def scan_directory(directory, progress_bar, retry_count=0):
     start_time = time.time()
 
     try:
-        result = subprocess.run(['sudo', clamav_cmd, "-r", "--remove=yes", "--exclude-dir=/proc", "--exclude-dir=/sys", path, "--log", log_file], capture_output=True, text=True)
+        result = subprocess.run(['sudo', 'ionice', '-c', '3', clamav_cmd, "-r", "--remove=yes", path, "--log", log_file], capture_output=True, text=True)
         progress_bar.set_description(f"正在扫描 {directory}")
         logging.info(f"开始扫描 {directory}")
 
