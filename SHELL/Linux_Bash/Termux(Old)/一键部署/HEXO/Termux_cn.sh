@@ -1,5 +1,5 @@
 #! /bin/bash
-echo 作者:Greenhandzdl  helper:Q:157668997
+echo 作者:Greenhandzdl
 echo version:20201024
 echo Start...
 echo 选项1适用于网络好的童鞋(网络不好也没关系，万事开头难，过了一会儿就快了)
