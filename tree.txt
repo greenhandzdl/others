@@ -1,0 +1,49 @@
+
+.
+├── ASM
+│   └── MASM
+│       ├── README.md
+│       └── print
+│           ├── README.md
+│           └── main.asm
+├── LICENSE
+├── README.md
+├── SHELL
+│   ├── Linux_Bash
+│   │   ├── Backup
+│   │   │   ├── arch_user
+│   │   │   │   ├── arch_auto_init.sh
+│   │   │   │   └── if_templet.sh
+│   │   │   ├── conv_youget.sh
+│   │   │   ├── cx_cleaner.sh
+│   │   │   └── flatpak_fix.sh
+│   │   └── Termux(Old)
+│   │       ├── LAZER
+│   │       │   ├── Readme.md
+│   │       │   ├── install.md
+│   │       │   └── lazer.sh
+│   │       ├── Readme.md
+│   │       └── 一键部署
+│   │           ├── HEXO
+│   │           │   ├── Readme.md
+│   │           │   ├── Termux_cn.sh
+│   │           │   └── install.md
+│   │           └── Readme.md
+│   └── Matlab_Shell
+│       └── 三角函数与单位圆关系
+│           ├── Beta
+│           │   └── v_20220115.m
+│           ├── v_20220115.bmp
+│           └── v_20220115.m
+├── arch_makebuild
+│   └── zlibrary
+│       └── PKGBUILD
+├── config
+├── git_pull_optimize.sh
+├── git_sync.sh
+├── git_update.sh
+├── python
+│   └── virus_scan.py
+└── tree.txt
+
+19 directories, 27 files

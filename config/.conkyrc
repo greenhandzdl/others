@@ -1,0 +1,96 @@
+conky.config = {
+    alignment = 'top_right',
+    background = false,
+    border_width = 1,
+    cpu_avg_samples = 2,
+    default_color = 'white',
+    default_outline_color = 'white',
+    default_shade_color = 'white',
+    double_buffer = true,
+    draw_borders = false,
+    draw_graph_borders = true,
+    draw_outline = false,
+    draw_shades = false,
+    extra_newline = false,
+    font = 'Noto Sans Mono:size=12',
+    gap_x = 20,
+    gap_y = 20,
+    minimum_height = 5,
+    minimum_width = 5,
+    net_avg_samples = 2,
+    no_buffers = true,
+    out_to_console = false,
+    out_to_ncurses = false,
+    out_to_stderr = false,
+    out_to_x = true,
+    own_window = true,
+    own_window_argb_value = 0,
+    own_window_argb_visual = true,
+    own_window_class = 'Conky',
+    own_window_hints = 'undecorated,sticky,below,skip_taskbar,skip_pager',
+    own_window_transparent = true,
+    own_window_type = 'desktop',
+    show_graph_range = false,
+    show_graph_scale = false,
+    stippled_borders = 0,
+    update_interval = 2.0,
+    uppercase = false,
+    use_spacer = 'none',
+    use_xft = true,
+}
+
+conky.text = [[${voffset 4}${color}${font :bold}HP EliteBook 840 G3${font}${image /home/username/.config/conky/archlogo.png -n -p 280x0 -s 98x30}
+$hr
+${color grey}Hostname: ${color}$nodename
+${color grey}OS      : ${color}$sysname $kernel $machine
+${color grey}Uptime  : ${color}$uptime
+${color grey}Battery : ${color}$battery ${voffset 3}${battery_bar}${voffset -3}
+${voffset 8}${color}${font :size=14}CPU ${font} (Intel Core i7-6500U)$hr
+${voffset 4}${color grey}Core 0: ${color}${alignr}${freq_g 1} GHz  ${color grey}Temperature: ${color}${execi 30 sensors | grep "Core 0" | awk '{print $3}'}
+${color grey}Core 1: ${color}${alignr}${freq_g 2} GHz  ${color grey}Temperature: ${color}${execi 30 sensors | grep "Core 1" | awk '{print $3}'}
+${voffset 4}${color grey}Thread 1: ${color}${voffset 3}${cpubar cpu1}${voffset -3}
+${color grey}Thread 2: ${color}${voffset 3}${cpubar cpu2}${voffset -3}
+${color grey}Thread 3: ${color}${voffset 3}${cpubar cpu3}${voffset -3}
+${color grey}Thread 4: ${color}${voffset 3}${cpubar cpu4}${voffset -3}
+${voffset 4}${color grey}Process              CPU%   MEM%
+${color}  ${top name 1} ${top cpu 1} ${top mem 1}
+${color}  ${top name 2} ${top cpu 2} ${top mem 2}
+${color}  ${top name 3} ${top cpu 3} ${top mem 3}
+${voffset 6}${color}${font :size=14}RAM ${font}$hr
+${voffset 4}${color grey}Memory usage: ${color}${memperc}% of ${memmax} ${voffset 3}${membar}${voffset -3}
+${voffset 4}${color grey}Process              MEM%   CPU%
+${color}  ${top_mem name 1} ${top_mem mem 1} ${top_mem cpu 1}
+${color}  ${top_mem name 2} ${top_mem mem 2} ${top_mem cpu 2}
+${color}  ${top_mem name 3} ${top_mem mem 3} ${top_mem cpu 3}
+${voffset 6}${color}${font :size=14}DISK ${font}$hr
+${voffset 4}${color grey}Local root: $color${fs_free /} ${goto 215}${color grey}/ ${color} ${fs_size /}${goto 335}${voffset 3}${fs_bar /}${voffset -3}
+${color grey}Gentoo    : ${color}${fs_free /mnt/Gentoo} ${goto 215}${color grey}/ ${color}${fs_size /mnt/Gentoo}${goto 335}${voffset 3}${fs_bar /mnt/Gentoo}${voffset -3}
+${color grey}Google    : ${color}${fs_free /home/username/Cloud/GoogleDrive} ${goto 215}${color grey}/ ${color}${fs_size /home/username/Cloud/GoogleDrive}${goto 335}${voffset 3}${fs_bar /home/username/Cloud/GoogleDrive}${voffset -3}
+${color grey}OneDrive  : $color${fs_free /home/username/Cloud/OneDrive-Private} ${goto 215}${color grey}/ ${color}${fs_size /home/username/Cloud/OneDrive-Private}${goto 335}${voffset 3}${fs_bar /home/username/Cloud/OneDrive-Private}${voffset -3}
+${color grey}Dropbox   : $color${fs_free /home/username/Cloud/Dropbox} ${goto 215}${color grey}/ ${color}${fs_size /home/username/Cloud/Dropbox}${goto 335}${voffset 3}${fs_bar /home/username/Cloud/Dropbox}${voffset -3}
+${color grey}Mega      : $color${fs_free /home/username/Cloud/Mega} ${goto 215}${color grey}/ ${color}${fs_size /home/username/Cloud/Mega}${goto 335}${voffset 3}${fs_bar /home/username/Cloud/Mega}${voffset -3}
+${color grey}Pelle     : $color${fs_free /mnt/Pelle/Felles} ${goto 215}${color grey}/ ${color}${fs_size /mnt/Pelle/Felles}${goto 335}${voffset 3}${fs_bar /mnt/Pelle/Felles}${voffset -3}
+${voffset 4}${color grey}      Read: ${color}${diskio_read /dev/sda} ${goto 230}${color grey}Write: ${color}${diskio_read /dev/sda}
+${voffset 6}${color}${font :size=14}NETWORK ${font}$hr
+${if_existing /proc/net/route wlp2s0}\
+${if_existing /proc/net/route enp0s31f6}\
+${voffset 4}${color grey}Warning: ${color}Both Wi-Fi and wired network active!
+${else}\
+${voffset 4}${color grey}ESSID: ${color}${wireless_essid wlp2s0}${goto 240}${color grey}Quality: ${color}${wireless_link_qual_perc wlp2s0}%
+${voffset 4}${color grey}  IP : ${color}${addr wlp2s0}${goto 240}${voffset 8}${color grey}Down:${goto 300}${color}${downspeed wlp2s0}
+${voffset -8}${color grey}  Zt : ${color}${addr zerotierdevice}${goto 240}${voffset 8}${color grey}Up  :${goto 300}${color}${upspeed wlp2s0}
+${voffset -8}${color grey}  GW : ${color}${gw_ip}
+${color grey}  Pub: ${color}${texeci 30 ~/.config/conky/pubIP.sh}
+${endif}\
+${else}\
+${if_existing /proc/net/route enp0s31f6}\
+${voffset 4}${color grey}Wired network: ${color}Active
+${voffset 4}${color grey}  IP : ${color}${addr enp0s31f6}${goto 240}${voffset 8}${color grey}Down:${goto 300}${color}${downspeed enp0s31f6}
+${voffset -8}${color grey}  Zt : ${color}${addr zerotierdevice}${goto 240}${voffset 8}${color grey}Up  :${goto 300}${color}${upspeed enp0s31f6}
+${voffset -8}${color grey}  GW : ${color}${gw_ip}
+${color grey}  Pub: ${color}${texeci 30 ~/.config/conky/pubIP.sh}
+${endif}\
+${endif}\
+${voffset 6}${color}${font :size=14}UPDATES ${font}$hr
+${voffset 4}${color grey}      Arch: ${color}${execi 600 checkupdates | wc -l}${goto 230}${color grey}AUR: ${color}${execi 600 auracle outdated | wc -l}
+]]
