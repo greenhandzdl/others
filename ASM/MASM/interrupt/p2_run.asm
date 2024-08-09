@@ -23,12 +23,12 @@ code segment
             int 10h
 
             ;int21h:(ah=9;光标位置显示字符串),ds:dx指向字符串;要显示的字符串需用“$"作为结束符
-            mov dx,bx
+            mov dx,[bx]
             mov ah,9
             int 21h
 
             inc si
-            inc bx
+            add bx,2
 
             loop ok
         ;int21h:(ah=4c;不玩了，返回),al为返回码
