@@ -54,7 +54,7 @@ code segment
         mov [opt+1],al
         mov [opt+2],dl
 
-        mov ah,2h
+        mov ah,2h;调用int21h(ah=2h;显示字符)
 
         mov dl,[opt+0]
         int 21h
