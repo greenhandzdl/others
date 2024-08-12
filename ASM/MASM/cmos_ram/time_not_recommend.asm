@@ -3,7 +3,7 @@
 assume cs:code
 
 data segment
-    db 9,8,7,4,2,0
+    db 9,8,7,4,2,0,-1
 data ends
 
 code segment
@@ -21,7 +21,7 @@ code segment
             call data_get
             call data_process
             call print
-            cmp byte ptr ds:[si],0
+            cmp byte ptr ds:[si],-1
             jne l0
 
         mov ax,4c00h
@@ -44,10 +44,14 @@ code segment
 
     print:
         shl si,1
+        shl si,1
+        shl si,1
         mov byte ptr es:[160*12+40*2][si],ah
         mov byte ptr es:[160*12+40*2+2][si],al
         mov dl,'/'
         mov byte ptr es:[160*12+40*2+4][si],dl
+        shr si,1
+        shr si,1
         shr si,1
         ret
 
