@@ -26,8 +26,9 @@
 │       ├── Hello World
 │       │   ├── compile.sh
 │       │   └── main.asm
-│       └── interrupt(linux)
-│           └── main.asm
+│       ├── interrupt(linux)
+│       │   └── main.asm
+│       └── run_i386.sh
 ├── LICENSE
 ├── README.md
 ├── SHELL
@@ -71,4 +72,4 @@
 │   └── virus_scan.py
 └── tree.txt
 
-27 directories, 44 files
+27 directories, 45 files
