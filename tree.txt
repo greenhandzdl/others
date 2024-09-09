@@ -61,13 +61,24 @@
 │   │       │   └── v_20220115.m
 │   │       ├── v_20220115.bmp
 │   │       └── v_20220115.m
+│   ├── git_collection
+│   │   ├── git_clean.sh
+│   │   ├── git_delete-history.sh
+│   │   ├── git_mv_backup.sh
+│   │   ├── git_pull_optimize.sh
+│   │   ├── git_sync.sh
+│   │   └── git_update.sh
 │   └── joke
 │       └── jvav
 ├── arch_makebuild
 │   └── zlibrary
 │       └── PKGBUILD
+├── c
+│   └── equal.c
 ├── config
-├── delete-history.sh
+├── git_clean.sh
+├── git_delete-history.sh
+├── git_mv_backup.sh
 ├── git_pull_optimize.sh
 ├── git_sync.sh
 ├── git_update.sh
@@ -75,4 +86,4 @@
 │   └── virus_scan.py
 └── tree.txt
 
-28 directories, 47 files
+30 directories, 56 files
