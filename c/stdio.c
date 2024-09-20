@@ -20,17 +20,16 @@ int stdio(void){
         printf("正在复读:\n");
         while ((ch=getchar()) != EOF)
             putchar(ch);
-        getchar();//为啥会直接退啊？
+        while(!isspace(ch=getchar()));
         printf("\n输入q进行退出：\n");
         switch (toupper(ch=getchar())){
             //if处理更好，也可以尝试switch语句不用break中断来连接几个选项
             case 'Q':
-                break;
-            default:
                 goto quit;
                 break;
+            default:
+                break;
         }
-
     }while(1);
 
     quit:return 0;
