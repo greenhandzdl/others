@@ -1,9 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-static double num1,num2,num3;
+static double num1,num2,num3;//可以考虑数组来增加扩展性
 static unsigned int i = 1;//用于统计
-static unsigned int tot = 0;
+static unsigned int tot = 0;//注意i和tot相关值可以用来修改平均
 
 //TODO:分离函数来求取平均值？
 int main(int argc,char *argv[]){
