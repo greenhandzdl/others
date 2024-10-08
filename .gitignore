@@ -2,3 +2,5 @@
 *.out
 *.o
 
+#binary files clean
+*.dat
