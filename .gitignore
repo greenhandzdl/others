@@ -4,3 +4,4 @@
 
 #binary files clean
 *.dat
+.DS_Store
