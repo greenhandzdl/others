@@ -10,7 +10,7 @@ int main(void){
         perror("fopen");
         return -1;
     };
-    fwrite(&i,sizeof(float),1,p);
+    fwrite(&i,sizeof i,1,p);
     fclose(p);
     return 0;
 }
