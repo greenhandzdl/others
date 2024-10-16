@@ -15,14 +15,17 @@ static inline void arrIsEmptyErr(void);
 
 int main(void){
     char arr[ARR_SIZE];
-    int status = inputToArr(arr,ARR_SIZE);
-    reverseArr(arr,status);
+    int status = 0;
+    ioloop:
+        status = inputToArr(arr,ARR_SIZE);
+        reverseArr(arr,status);
+    goto ioloop;
     puts(arr);
     return 0;
 }
 
 int inputToArr(char* arr,int n){
-    puts("Please enter a string,I will reverse it for you: ");
+    puts("Please enter a string(elements < 80),I will reverse it for you(leave blank for quit):");
     return s_gets(arr,n-1,stdin);
 }
 void reverseArr(char* arr,int n){
