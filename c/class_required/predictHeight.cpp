@@ -21,13 +21,21 @@ int main(void){
     float  faHeight, moHeight;
     unsigned  height;
     cout << "请输入用户的性别（F/M）" << endl;
+    // 输入的时候应该自动转为大写
     cin >> sex;
+    sex = toupper(sex);
+    
     cout << "请输入用户的父母身高（cm）" << endl;
     cin >> faHeight >> moHeight;
+    
     cout << "请输入是否喜爱体育锻炼（Y/N）" << endl;
     cin >> sports;
+    sports = toupper(sports);
+    
     cout << "请输入是否拥有良好的饮食习惯（Y/N）" << endl;
     cin >> diet;
+    diet = toupper(diet);
+
     if(sex == 'M'){
         height = (faHeight + moHeight)* FARATIO;
     }else{
