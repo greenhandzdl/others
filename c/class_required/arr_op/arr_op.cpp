@@ -84,9 +84,9 @@ static void funct(USER_INPUT& user_input){
     print_arr_info(&user_input);
 }
 
-static void init_arr(USER_INPUT* user_input){
+static void init_arr(friendly_user_input_type user_input){
     if(get_current_pointer(user_input))
-        delete_USER_INPUT(user_input);
+        delete_arr(user_input);
     
     switch (user_input->arr_type){
         case 'i':
@@ -117,11 +117,11 @@ static void init_arr(USER_INPUT* user_input){
             cout << "输入错误，程序退出" << endl;
             exit(EXIT_FAILURE);
     }
-    input_arr(user_input);
+    input_reset_arr(user_input);
 }
 //这个函数用于整个的输入
 //TODO:写一个函数原型用于某个位置元素修改吧？
-static void input_arr(USER_INPUT* user_input){
+static void input_reset_arr(friendly_user_input_type user_input){
     cout << "请输入数组元素:" << endl;
     for(int i = 0; i < user_input->arr_size; i++){
         switch (user_input->arr_type){
@@ -167,7 +167,7 @@ static void input_arr(USER_INPUT* user_input){
     eatline();//清理下换行符或者超出数组边界什么的，上面会忽视这些空白字符
 }
 //好像没什么用(当模版吧)
-static void *get_current_pointer(const USER_INPUT* user_input){
+static void *get_current_pointer(const friendly_user_input_type user_input){
     switch (user_input->arr_type){
     case 'i':
         return user_input->arr_ptr.int_arr;
@@ -186,7 +186,7 @@ static void *get_current_pointer(const USER_INPUT* user_input){
         exit(EXIT_FAILURE);
     }
 }
-static void print_arr_info(const USER_INPUT* user_input){
+static void print_arr_info(const friendly_user_input_type user_input){
     cout << "数组类型:";
     switch (user_input->arr_type){
         case 'i':
@@ -235,7 +235,7 @@ static void print_arr_info(const USER_INPUT* user_input){
     << "******************************************************" << endl
     << "******************************************************" << endl;
 }
-void delete_USER_INPUT(USER_INPUT* user_input) {
+static void delete_arr(friendly_user_input_type user_input) {
     void *ptr = get_current_pointer(user_input);
     if (ptr) {
         switch (user_input->arr_type) {
@@ -259,7 +259,7 @@ void delete_USER_INPUT(USER_INPUT* user_input) {
 }
 
 //虽然我想用前和后来交换，但之前写过这个作业，就偷偷懒吧
-static void reverse_arr(USER_INPUT* user_input) {
+static void reverse_arr(friendly_user_input_type user_input) {
     void *ptr = get_current_pointer(user_input);
     if (ptr) {
         switch (user_input->arr_type) {
