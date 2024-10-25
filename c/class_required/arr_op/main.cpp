@@ -2,11 +2,8 @@
 #include "arr_op.h"
 
 int main(void){
-    USER_INPUT user_input_1 = menu();
-    USER_INPUT user_input_2 = menu();
-    
+    friendly_user_input_type user_input_1 = menu();
     //对申请的堆进行释放（手动
-    delete_arr(&user_input_1);
-    delete_arr(&user_input_2);
+    delete_USER_INPUT(user_input_1);
     return 0;
 }

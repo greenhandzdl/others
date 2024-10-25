@@ -3,8 +3,8 @@
 
 #include "arr_op.h"
 
-USER_INPUT menu(void){
-    USER_INPUT user_input = {0};
+friendly_user_input_type menu(void){
+    friendly_user_input_type user_input = new USER_INPUT;
     
     int count (0);
     
@@ -17,7 +17,7 @@ USER_INPUT menu(void){
     cout << "* a.数组统计                                         *" << endl;
     cout << "* n.无操作)                                           *" << endl;
     cout << "* 输入你的选择功能（ctrl c退出）:                                         *" << endl;
-    is_valid_char(user_input.menu_choice,"rcfsmaen");
+    is_valid_char(user_input->menu_choice,"rcfsmaen");
 
 
     cout 
@@ -29,7 +29,7 @@ USER_INPUT menu(void){
     cout << "* d.double类型                                       *" << endl;
     cout << "* c.char类型                                *" << endl;
     cout << "请输入数组类型:" << endl;
-    is_valid_char(user_input.arr_type,"ifdc");
+    is_valid_char(user_input->arr_type,"ifdc");
 
 
     cout
@@ -37,7 +37,7 @@ USER_INPUT menu(void){
         << endl
         << "******************************************************" << endl;
     cout << "请输入数组大小:" << endl;
-    while(!(cin >> user_input.arr_size)){
+    while(!(cin >> user_input->arr_size)){
         cout << "输入发生错误，正在尝试解决" << endl;
         cout << "如果多次出现该错误，请退出程序" << endl;
         eatline(); 
@@ -47,42 +47,115 @@ USER_INPUT menu(void){
         << endl
         << "******************************************************" << endl;
     
-    init_arr(&user_input);
+    init_arr(user_input);
 
     funct(user_input);
     
     return user_input;
 }
 
-static void funct(USER_INPUT& user_input){
+static void funct(friendly_user_input_type user_input){
     cout << "当前你的数组是:" << endl;
-    print_arr_info(&user_input);
-    switch (user_input.menu_choice){
+    print_USER_INPUT_info(user_input);
+    cout << endl
+        << "******************************************************" << endl
+        << "现在你的数组是:" << endl;
+        
+    switch (user_input->menu_choice){
         case 'r':
-            reverse_arr(&user_input);
+            reverse_arr(user_input);
             break;
         case 'c':
-            //copy_arr(dest,user_input.arr_ptr);
-            break;
-        case 'f':
-            //find_arr(user_input.arr_ptr,"用户输入的元素");
+            cout << "暂时不支持菜单操作，编写代码时可参考funct()函数写法" <<endl;
+            {
+                //fallthrough 导致了控制流跳过了 deamon_arr 的初始化
+                friendly_user_input_type deamon_arr = cop_arr(user_input);
+                print_USER_INPUT_info(deamon_arr);
+                delete_USER_INPUT(deamon_arr);
+            }
             break;
         case 's':
-            //sort_arr(user_input.arr_ptr);
+            sort_arr(user_input);
             break;
         case 'm':
-            //max_min_arr(user_input.arr_ptr);
+            min_max_arr(user_input);
             break;
+        case 'f':
+            [[fallthrough]];//查找数组感觉差不多
         case 'a':
-            //arr_statistics(user_input.arr_ptr);
+            analyze_arr(user_input);
             break;
         default:
             cout << "无操作" << endl;
             break;
     }
-    cout << "现在你的数组是:" << endl;
-    print_arr_info(&user_input);
+
+    cout << endl
+        << "******************************************************" << endl
+        << "现在你的数组是:" << endl;
+    print_USER_INPUT_info(user_input);
 }
+
+friendly_user_input_type cop_arr(friendly_user_input_type user_input){
+    friendly_user_input_type copy_user_input = new USER_INPUT;
+    *copy_user_input = *user_input; // 深拷贝 user_input 的内容
+    copy_user_input->arr_ptr.int_arr = nullptr;
+    copy_user_input->arr_ptr.float_arr = nullptr;
+    copy_user_input->arr_ptr.double_arr = nullptr;
+    copy_user_input->arr_ptr.char_arr = nullptr;
+    switch (copy_user_input->arr_type){
+        case 'i':
+            if( ( copy_user_input->arr_ptr.int_arr = new int[copy_user_input->arr_size]) == NULL ){
+                cout << "内存申请失败，程序退出" << endl;
+                exit(EXIT_FAILURE);
+                }
+            break;
+       case 'f':
+            if( (copy_user_input->arr_ptr.float_arr = new float[copy_user_input->arr_size]) == NULL ){
+                cout << "内存申请失败，程序退出" << endl;
+                exit(EXIT_FAILURE);
+            }
+            break;
+        case 'd':
+            if( (copy_user_input->arr_ptr.double_arr = new double[copy_user_input->arr_size]) == NULL ){
+                cout << "内存申请失败,程序退出" << endl;
+                exit(EXIT_FAILURE);
+            }
+            break;
+        case 'c':
+            if( (copy_user_input->arr_ptr.char_arr = new char[copy_user_input->arr_size]) == NULL ){
+                cout << "内存申请失败，程序退出" << endl;
+                exit(EXIT_FAILURE);
+            }
+            break;
+        default:
+            cout << "输入错误，程序退出" << endl;
+            exit(EXIT_FAILURE);
+            break;
+    }
+    //复制到新的堆里来
+    for(int i = 0; i < copy_user_input->arr_size; i++){
+        switch (copy_user_input->arr_type){
+            case 'i':
+                copy_user_input->arr_ptr.int_arr[i] = user_input->arr_ptr.int_arr[i];
+                break;
+            case 'f':
+                copy_user_input->arr_ptr.float_arr[i] = user_input->arr_ptr.float_arr[i];
+               break;
+            case 'd':
+                copy_user_input->arr_ptr.double_arr[i] = user_input->arr_ptr.double_arr[i];
+                break;
+            case 'c':
+                copy_user_input->arr_ptr.char_arr[i] = user_input->arr_ptr.char_arr[i];
+                break;
+            default:
+                cout << "类型错误，程序退出" << endl;
+                exit(EXIT_FAILURE);
+        }
+    }
+    return copy_user_input;
+}
+
 
 static void init_arr(friendly_user_input_type user_input){
     if(get_current_pointer(user_input))
@@ -166,6 +239,26 @@ static void input_reset_arr(friendly_user_input_type user_input){
     }
     eatline();//清理下换行符或者超出数组边界什么的，上面会忽视这些空白字符
 }
+static void print_arr_type(const friendly_user_input_type user_input){
+    switch (user_input->arr_type) {
+        case 'i':
+            cout << "整型 (int)";
+            break;
+        case 'f':
+            cout << "浮点型 (float)";
+            break;
+        case 'd':
+            cout << "双精度浮点型 (double)";
+            break;
+        case 'c':
+            cout << "字符型 (char)" ;
+            break;
+        default:
+            std::cerr << "无效的数组类型" ;
+            break;
+    }
+}
+
 //好像没什么用(当模版吧)
 static void *get_current_pointer(const friendly_user_input_type user_input){
     switch (user_input->arr_type){
@@ -186,7 +279,7 @@ static void *get_current_pointer(const friendly_user_input_type user_input){
         exit(EXIT_FAILURE);
     }
 }
-static void print_arr_info(const friendly_user_input_type user_input){
+static void print_USER_INPUT_info(const friendly_user_input_type user_input){
     cout << "数组类型:";
     switch (user_input->arr_type){
         case 'i':
@@ -235,6 +328,14 @@ static void print_arr_info(const friendly_user_input_type user_input){
     << "******************************************************" << endl
     << "******************************************************" << endl;
 }
+
+void delete_USER_INPUT(friendly_user_input_type user_input){
+    if(user_input){
+        delete_arr(user_input);
+        delete user_input;
+    }
+}
+
 static void delete_arr(friendly_user_input_type user_input) {
     void *ptr = get_current_pointer(user_input);
     if (ptr) {
@@ -252,7 +353,7 @@ static void delete_arr(friendly_user_input_type user_input) {
             delete [] static_cast<char*>(ptr);
             break;
         default:
-            std::cout << "类型错误，程序退出" << std::endl;
+            cout << "类型错误，程序退出" << std::endl;
             std::exit(EXIT_FAILURE);
         }
     }
@@ -284,10 +385,162 @@ static void reverse_arr(friendly_user_input_type user_input) {
                 break;
             }
             default:
-                std::cout << "类型错误，程序退出" << std::endl;
+                cout << "类型错误，程序退出" << std::endl;
                 std::exit(EXIT_FAILURE);
         }
     }
+}
+
+static void sort_arr(friendly_user_input_type user_input) {
+    void *ptr = get_current_pointer(user_input);
+    if (ptr) {
+        switch (user_input->arr_type) {
+            case 'i': {
+                int* int_ptr = static_cast<int*>(ptr);
+                std::sort(int_ptr, int_ptr + user_input->arr_size);
+                break;
+            }
+            case 'f': {
+                float* float_ptr = static_cast<float*>(ptr);
+                std::sort(float_ptr, float_ptr + user_input->arr_size);
+                break;
+            }
+            case 'd': {
+                double* double_ptr = static_cast<double*>(ptr);
+                std::sort(double_ptr, double_ptr + user_input->arr_size);
+                break;
+            }
+            case 'c': {
+                char* char_ptr = static_cast<char*>(ptr);
+                std::sort(char_ptr, char_ptr + user_input->arr_size);
+                break;
+            }
+            default:
+                cout << "类型错误，程序退出" << std::endl;
+                std::exit(EXIT_FAILURE);
+        }
+    }
+}
+static void min_max_arr(friendly_user_input_type user_input) {
+    switch (user_input->arr_type) {
+        case 'i': {
+            int* int_ptr = static_cast<int*>(get_current_pointer(user_input));
+            cout << "最小值为" << *min_element(int_ptr, int_ptr + user_input->arr_size) << std::endl;
+            cout << "最大值为" << *max_element(int_ptr, int_ptr + user_input->arr_size) << std::endl;
+            break;
+        }
+        case 'f': {
+            float* float_ptr = static_cast<float*>(get_current_pointer(user_input));
+            cout << "最小值为" << *min_element(float_ptr, float_ptr + user_input->arr_size) << std::endl;
+            cout << "最大值为"<< *max_element(float_ptr, float_ptr + user_input->arr_size) << std::endl;
+            break;
+        }
+        case 'd': {
+            double* double_ptr = static_cast<double*>(get_current_pointer(user_input));
+            cout << "最小值为" << *min_element(double_ptr, double_ptr + user_input->arr_size) << std::endl;
+            cout << "最大值为" << *max_element(double_ptr, double_ptr + user_input->arr_size) << std::endl;
+            break;
+        }
+        case 'c': {
+            char* char_ptr = static_cast<char*>(get_current_pointer(user_input));
+            cout << "最小值为" << *min_element(char_ptr, char_ptr + user_input->arr_size) << std::endl;
+            cout << "最大值为" << *max_element(char_ptr, char_ptr + user_input->arr_size) << std::endl;
+            break;
+        }
+    }
+}
+static int analyze_arr(friendly_user_input_type user_input){
+    cout << endl
+    << "******************************************************" << endl
+    << "******************************************************" << endl
+    //通过user_input->arr_type来创建相应类型变量供cin使用
+    << "这个数组是" ;
+    print_arr_type(user_input);
+    cout << "类型" << endl;
+    cout << "请输入要查找元素（0为不存在）：";
+    unsigned int tmp (0),count (0);
+    switch(user_input->arr_type){
+        case 'i':
+            int ifind_ele;
+            if(cin >> ifind_ele);
+            else{
+                cout << "查找元素错误" <<endl;
+                eatline();
+            }
+            while(tmp < user_input->arr_size){
+                if(user_input->arr_ptr.int_arr[tmp++] == ifind_ele){
+                    count++;
+                    cout << "元素" << ifind_ele << "在数组中第" << tmp << "个位置" << endl;
+                }
+            }
+            if(count)
+                cout << "元素" << ifind_ele << "在数组中一共出现了" << count << "次" << endl;
+            else
+                cout << "元素" << ifind_ele << "在数组中不存在" << endl;
+        break;
+        case 'f':
+            float ffind_ele;
+            if(cin >> ffind_ele);
+            else{
+                cout << "查找元素错误" <<endl;
+                eatline();
+            }
+            while(tmp < user_input->arr_size){
+                if(user_input->arr_ptr.float_arr[tmp++] == ffind_ele){
+                    count++;
+                    cout << "元素" << ffind_ele << "在数组中第" << tmp << "个位置" << endl;
+                }
+            }
+            if(count)
+                cout << "元素" << ffind_ele << "在数组中一共出现了" << count << "次" << endl;
+            else
+                cout << "元素" << ffind_ele << "在数组中不存在" << endl;
+            break;
+        case 'd':   
+                double dfind_ele;
+                if(cin >> dfind_ele);
+                else{
+                    cout << "查找元素错误" <<endl;
+                    eatline();
+                }
+                while(tmp < user_input->arr_size){
+                    if(user_input->arr_ptr.double_arr[tmp++] == dfind_ele){
+                        count++;
+                        cout << "元素" << dfind_ele << "在数组中第" << tmp << "个位置" << endl;
+                    }
+                }  
+                if(count)
+                    cout << "元素" << dfind_ele << "在数组中一共出现了" << count << "次" << endl;
+                else
+                    cout << "元素" << dfind_ele << "在数组中不存在" << endl;
+        break;
+        case 'c':
+            char cfind_ele;
+            if(cin >> cfind_ele);
+            else{
+                cout << "查找元素错误" <<endl;
+                eatline();
+            }
+            while(tmp < user_input->arr_size){
+                if(user_input->arr_ptr.char_arr[tmp++] == cfind_ele){
+                    count++;
+                    cout << "元素" << cfind_ele << "在数组中第" << tmp << "个位置" << endl;
+                }
+            } 
+            if(count)
+                cout << "元素" << cfind_ele << "在数组中一共出现了" << count << "次" << endl;
+            else
+                cout << "元素" << cfind_ele << "在数组中不存在" << endl;
+            break;
+            default:
+                cout << "类型错误，程序退出" << endl;
+                exit(EXIT_FAILURE);
+            break;    
+    }
+    cout 
+    << "******************************************************" << endl
+    << "******************************************************" << endl;
+    return count;
 }
 
 static char safety_getchar_tolower(char& ch){
