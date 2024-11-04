@@ -10,9 +10,9 @@ int main(void){
     std::sort(arr,arr+M);
 
     for(int i=0;i<M;i++){
-        std::cout<<"第"<<i+1<<"次，"<<arr[i].name()<<"老师去开会"<<std::endl;
+        std::cout<<"第"<<i+1<<"次，"<<arr[i]<<"老师去开会"<<std::endl;
     }
 
 }
 
-//g++ main.cpp randomSeq.cpp -o randomSeq.out && ./randomSeq.out
+// g++ main.cpp randomSeq.cpp -o randomSeq.out && ./randomSeq.out

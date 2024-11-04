@@ -25,6 +25,8 @@
             bool operator==(const Member&) const;
             bool operator!=(const Member&) const;
 
+            friend std::ostream& operator<<(std::ostream&, const Member&);
+
             ~Member()//default constructor用于销毁该类并且输出
             {
                 std::cout<<"Member "<<memberName<<" is destroyed."<<std::endl;
