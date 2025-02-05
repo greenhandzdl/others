@@ -1,0 +1,19 @@
+name: Run testing shell script on Arch Linux
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run shell script
+      run: |
+        chmod +x SHELL/Linux_Bash/Backup/arch_user/arch_auto_init.sh
+        ./SHELL/Linux_Bash/Backup/arch_user/arch_auto_init.sh default
+        #注意：如要测试，请记得更换路径什么的

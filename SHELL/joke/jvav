@@ -1,0 +1,23 @@
+#!/bin/bash
+# Title: jvav
+# Data: 2024-08-25
+# Author: greenhandzdl
+# Version: Latest
+# Description: 捕获 `java` 命令的输出并替换
+# Option: None
+output=$(java $@ 2>&1) # 捕获所有输出，包括错误
+echo "$output" | sed 's/java/jvav/g'| sed 's/Java/Jvav/g'
+
+: <<-'END_EOF'
+=head1 DESCRIPTION
+
+About Jvav
+
+    Introduction: jvav was proposed by Zhang Haoyang and researched by many developers. At present, there are three versions of jvav, namely jvav se jvav ee jvav me, more than 114.514 million people use jvav, and more than 2.5 million companies use jvav to make websites. The game mini is developed using jvav
+
+    Jvav is a very low performance programming language, its syntax is so bad, you can go to jvav.top to download a worse version, yes, its spelling is so disgusting.
+
+=cut
+    DOC powered by pod2&&perdoc
+    
+END_EOF

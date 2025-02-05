@@ -1,0 +1,8 @@
+#c code clean
+*.out
+*.o
+
+#binary files clean
+*.dat
+.DS_Store
+/.vscode
