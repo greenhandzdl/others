@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iterator>
-
 int main(void){
 
     /*
@@ -10,11 +9,16 @@ int main(void){
     */
 
    // 针对 wchar_t 类型的输入输出流迭代器
-   // 中文占位可能需要多个字，所以当中文被隔开的时候会乱码？
-    std::copy(std::istream_iterator<wchar_t, wchar_t>(std::wcin),
-          std::istream_iterator<wchar_t, wchar_t>(),
-          std::ostream_iterator<wchar_t, wchar_t>(std::wcout, L""));
-        
+   // 中文优化
+    std::wcin.imbue(std::locale("zh_CN.UTF-8"));
+    std::wcout.imbue(std::locale("zh_CN.UTF-8"));
+    try{
+        std::copy(std::istream_iterator<wchar_t, wchar_t>(std::wcin),
+            std::istream_iterator<wchar_t, wchar_t>(),
+            std::ostream_iterator<wchar_t, wchar_t>(std::wcout, L" "));
+    }catch(std::exception& e){
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 // g++ -std=c++11 main.cpp -o main.out && ./main.out
