@@ -29,9 +29,12 @@ CONFIGURE_OPTIONS=(
   --with-gmp="$(brew_path gmp)"
   --with-mpfr="$(brew_path mpfr)"
   --with-mpc="$(brew_path libmpc)"
+  --with-isl="$(brew_path isl)"
+  --with-zstd="$(brew_path zstd)"
   --with-libintl-prefix="$(brew --prefix gettext)"
   --enable-multilingual
   --enable-nls
+  --with-system-zlib
   --enable-shared
   # --disable-bootstrap  #  如果构建速度过慢，可以取消注释此行以禁用自举编译（但可能会降低优化级别）
 )
