@@ -55,6 +55,8 @@
         "unordered_map": "cpp",
         "variant": "cpp",
         "vector": "cpp",
-        "version": "cpp"
+        "version": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp"
     }
 }
