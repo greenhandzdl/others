@@ -146,6 +146,7 @@ bool file_write(std::string &filename){
     file.flush();
     file.close();
     file.clear();
+    return true;
 }
 int main(void){
     enum MenuOptions choice;
