@@ -92,7 +92,7 @@ bool filename_get(std::string &filename){
  */
 bool file_make(std::string &filename){
     using namespace std;
-    ofstream file(filename.c_str(), ios::out);
+    ofstream file(filename.c_str(), ios_base::out|ios_base::trunc);
     if(!file.is_open()){
         cerr << "文件打开失败" << endl;
         return false;
@@ -110,7 +110,7 @@ bool file_make(std::string &filename){
  */
 bool file_read(std::string &filename){
     using namespace std;
-    ifstream file(filename.c_str(), ios::in);
+    ifstream file(filename.c_str(), ios_base::in);
     if(!file.is_open()){
         cerr << "文件打开失败" << endl;
         return false;
@@ -133,7 +133,7 @@ bool file_read(std::string &filename){
  */
 bool file_write(std::string &filename){
     using namespace std;
-    ofstream file(filename.c_str(), ios::app);
+    ofstream file(filename.c_str(), ios_base::out|ios_base::app);
     if(!file.is_open()){
         cerr << "文件打开失败" << endl;
         return false;
