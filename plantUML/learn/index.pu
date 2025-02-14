@@ -1,0 +1,32 @@
+@startuml 用户请求流程图
+
+skinparam backgroundColor #EEEBDC
+skinparam handwritten true
+
+autonumber 
+actor 用户 as User
+participant 服务器 as Server
+participant 微信服务器 as WechatServer
+database 数据库 as Database
+
+User -> Server: 发送请求
+Server -> WechatServer: 发送请求
+WechatServer -> Server: 请求地址
+Server -> User: 登陆地址
+User -> WechatServer: 登陆信息
+WechatServer -> Server: 回调server
+alt 登陆成功
+    group 异步操作
+        loop 保存失败重试
+            Server -> Database: 保存用户信息
+        end
+        Server -> User: 推送用户信息
+    end
+    Server -> User: 登陆成功
+else 登陆失败
+    Server -> User: 登陆失败
+end
+
+note left of User: 登陆成功后，用户可以进行相关操作
+note left of User:教程来源： https://b23.tv/nFiuuzu
+@enduml
