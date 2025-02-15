@@ -1,0 +1,62 @@
+@startuml
+skinparam handwritten true
+hide @unlinked
+
+class classA
+class classB
+class classC
+
+classA -down- "*" classB :Association >
+note left of classB 
+    0...num多个关联。
+    关联（具有关联名称的阅读⽅向）
+end note
+
+classA -down-> classC : Association m...n
+note right of classC : 关联（具有导航的⽅向）
+
+newpage
+
+abstract classWhole
+class classPart1
+class classPart2
+
+classWhole o-down- classPart1
+classWhole o-down- classPart2
+note  "这是聚合模式，比组合关系弱。子模块可以单独用。" as 聚合模式
+
+newpage
+
+classWhole *-down- classPart1
+classWhole *-down- classPart2
+note "这是组合模式，比聚合关系强。" as 组合模式
+
+newpage
+
+metaclass SuperClass <? Super>
+class SubclassA1
+class SubclassA2
+SuperClass <|--SubclassA1
+SuperClass <|--SubclassA2
+note "这是泛化" as 泛化
+
+newpage
+
+class SuperClassWithMethods{
+    -privateMethods()
+    #protectedMethods()
+    ~packageMethods()
+    +publicMethods()
+
+    -privateMembers
+    #protectedMembers
+    ~packageMembers
+    +publicMembers
+}
+SuperClassWithMethods <|-up- SubclassA1
+SuperClassWithMethods <|-up- SubclassA2
+note left on link #blue
+    随便写的注释
+end note
+
+@enduml
