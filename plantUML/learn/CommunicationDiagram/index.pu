@@ -1,4 +1,4 @@
-@startuml 用户请求流程图
+@startuml 交互图--通信图
 
 skinparam backgroundColor #EEEBDC
 skinparam handwritten true
