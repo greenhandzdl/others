@@ -6,14 +6,14 @@ skinparam usecase {
     BackgroundColor DarkSeaGreen
     BorderColor DarkSlateGray
 
-    BackgroundColor<< 构造类型用例 >> YellowGreen
-    BorderColor<< 构造类型用例 >> YellowGreen
+    BackgroundColor<<构造类型用例>> YellowGreen
+    BorderColor<<构造类型用例>> YellowGreen
 
     ArrowColor Olive
 
     ActorBorderColor black
     ActorFontName Courier
-    ActorBackgroundColor<< 构造类型用例actor >> Gold
+    ActorBackgroundColor<<构造类型用例actor>> Gold
 }
 note "(全局设置)这里可以自定义某些参数，请注意构造类型用法" as note1
 note "请注意注释用法，..用于连接。还可以使用note <direction> of xx" as note2
@@ -21,9 +21,9 @@ note1 -down-> note2
 newpage
 
 skinparam actorStyle awesome
-actor Actor as actor << 构造类型用例actor >>
+actor Actor as actor <<构造类型用例actor>>
 package UseCasePackage{
-    usecase UseCase as usecase << 构造类型用例 >>
+    usecase UseCase as usecase <<构造类型用例>>
 }
 
 actor -right-> UseCasePackage #green;line.dashed;text:green

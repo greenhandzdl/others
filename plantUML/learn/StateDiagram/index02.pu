@@ -1,0 +1,41 @@
+@startuml UML表⽰法中的状态机：带有正交区域的组合状态
+skinparam handwritten true
+hide empty description  
+
+state fork <<fork>>
+state join <<join>> 
+
+state "composite state B" as stateB {
+    state entryPointB <<entryPoint>>
+    state exitPointB <<exitPoint>>
+    
+    state "Substate B1" as substateB1
+    state "Substate B2" as substateB2
+    
+    entryPointB --> substateB1
+    substateB1 --> substateB2
+    substateB2 --> exitPointB
+} 
+state "composite state C" as stateC {
+    state entryPointC <<entryPoint>>
+    state exitPointC <<exitPoint>>
+    
+    state "Substate C1" as substateC1
+    state "Substate C2" as substateC2
+    
+    entryPointC -> substateC1
+    substateC1 --> substateC2
+    substateC2 --> exitPointC
+}
+
+
+[*] --> fork
+fork --> stateB.entryPointB
+fork --> stateC.entryPointC
+
+stateB.exitPointB --> join
+stateC.exitPointC --> join
+
+
+join --> [*]
+@enduml

@@ -1,0 +1,31 @@
+@startuml 参考
+skinparam handwritten true
+hide empty description
+
+state ConcurrentStates {
+    state RegionB {
+        state entryB <<entryPoint>>
+        state exitB <<exitPoint>>
+        
+        state "B1" as B1
+        state "B2" as B2
+        
+        entryB --> B1
+        B1 --> B2
+        B2 --> exitB
+    }
+    --
+    state RegionC {
+        state entryC <<entryPoint>>
+        state exitC <<exitPoint>>
+        
+        state "C1" as C1
+        state "C2" as C2
+        
+        entryC --> C1
+        C1 --> C2
+        C2 --> exitC
+    }
+}
+
+@enduml

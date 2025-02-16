@@ -1,0 +1,15 @@
+@startuml 简单状态图
+
+skinparam handwritten true
+
+hide empty description 
+[*] --> Start
+Start --> CheckForUpdate : Check for update
+CheckForUpdate --> UpdateAvailable : Update available
+UpdateAvailable --> DownloadUpdate : Download update
+DownloadUpdate --> ExtractUpdate : Extract update
+ExtractUpdate --> Restart : Restart application
+Restart --> [*]
+
+
+@enduml
