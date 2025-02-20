@@ -1,0 +1,10 @@
+@startuml
+    node "Linux 主机" as host{
+        node "VMware Windows" as vm
+
+        vm --> host :(通过bridge)\n访问物理机eth0网卡
+
+    }
+    node "路由器" as router
+    host --> router :实际上是windows\n的小米工具进行刷机操作
+@enduml
