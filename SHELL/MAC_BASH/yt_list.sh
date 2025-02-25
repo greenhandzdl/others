@@ -11,4 +11,10 @@ fi
 playlist_url="$1"
 
 # 使用yt-dlp下载播放列表
-yt-dlp -f 'bv*[height<=1080]+ba/b[height<=1080] / bv*+ba/b' --download-archive videos.txt "$playlist_url" -o '%(channel_id)s/%(playlist_id)s/%(title)s_%(id)s.%(ext)s'
+yt-dlp -f 'bv*[height<=1080]+ba/b[height<=1080] / bv*+ba/b' --download-archive videos.txt "$playlist_url" -o '%(channel_id)s/%(playlist_id)s/%(title)s_%(id)s.%(ext)s' --cookies-from-browser chrome 
+
+
+
+
+
+
