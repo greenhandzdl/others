@@ -1,0 +1,77 @@
+@startuml
+class LinkList<T> {
+  -Node* head
+  -Node* tail
+  -int count
+  +LinkList()
+  +LinkList(const T&)
+  +~LinkList(const LinkList&)
+  +~LinkList(LinkList&&) noexcept
+  +~LinkList& operator=(const LinkList&)
+  +~LinkList& operator=(LinkList&&) noexcept
+  +~void clear()
+  +int getCount() const
+  +bool isEmpty() const
+  +bool isExisted(const T&) const
+  +bool Modify(const T&, const T&)
+  +bool Add(const T&)
+  +bool Delete()
+  +Iterator begin()
+  +Iterator end()
+  +Iterator rbegin()
+  +Iterator rend()
+  +ConstIterator cbegin() const
+  +ConstIterator cend() const
+  +ConstIterator begin() const
+  +ConstIterator end() const
+  +void Print() const
+  +friend std::ostream& operator<<(std::ostream&, const LinkList&)
+}
+
+class Node<T> {
+  -T data
+  -Node* prev
+  -Node* next
+  +Node(T, Node* = nullptr, Node* = nullptr)
+  +~Node()
+  +T getData() const
+  +void setData(T)
+  +Node* getNext() const
+  +void setNext(Node*)
+  +Node* getPrev() const
+  +void setPrev(Node*)
+}
+
+class Iterator<T> {
+  -Node* current
+  -LinkList<T>* list
+  +Iterator(Node*, LinkList*)
+  +T& operator*() const
+  +Iterator& operator++()
+  +Iterator operator++(int)
+  +Iterator& operator--()
+  +Iterator operator--(int)
+  +bool operator==(const Iterator&) const
+  +bool operator!=(const Iterator&) const
+  +bool Add(const T&)
+  +bool Delete()
+  +bool Modify(const T&)
+  +Iterator Find(const T&)
+}
+
+class ConstIterator<T> {
+  -const Node* current
+  +ConstIterator(const Node*)
+  +const T& operator*() const
+  +ConstIterator& operator++()
+  +ConstIterator operator++(int)
+  +ConstIterator& operator--()
+  +ConstIterator operator--(int)
+  +bool operator==(const ConstIterator&) const
+  +bool operator!=(const ConstIterator&) const
+}
+
+LinkList *-- Node
+LinkList *-- Iterator
+LinkList *-- ConstIterator
+@enduml

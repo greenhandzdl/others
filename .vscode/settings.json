@@ -57,6 +57,8 @@
         "vector": "cpp",
         "version": "cpp",
         "fstream": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "map": "cpp",
+        "__tree": "cpp"
     }
 }
