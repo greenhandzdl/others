@@ -145,6 +145,32 @@ public:
         return true;
     }
 
+    bool push_back(const T& data) {
+        if (isEmpty()) {
+            head = new Node(data);
+            tail = head;
+        } else {
+            Node* newNode = new Node(data, tail);
+            tail->setNext(newNode);
+            tail = newNode;
+        }
+        ++count;
+        return true;
+    }
+
+    bool push_front(const T& data) {
+        if (isEmpty()) {
+            head = new Node(data);
+            tail = head;
+        } else {
+            Node* newNode = new Node(data, nullptr, head);
+            head->setPrev(newNode);
+            head = newNode;
+        }
+        ++count;
+        return true;
+    }
+
     bool Delete() {
         if (isEmpty()) return false;
 
