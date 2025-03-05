@@ -1,77 +1,110 @@
 @startuml
+' 定义LinkList类
 class LinkList<T> {
-  -Node* head
-  -Node* tail
-  -int count
-  +LinkList()
-  +LinkList(const T&)
-  +~LinkList(const LinkList&)
-  +~LinkList(LinkList&&) noexcept
-  +~LinkList& operator=(const LinkList&)
-  +~LinkList& operator=(LinkList&&) noexcept
-  +~void clear()
-  +int getCount() const
-  +bool isEmpty() const
-  +bool isExisted(const T&) const
-  +bool Modify(const T&, const T&)
-  +bool Add(const T&)
-  +bool Delete()
-  +Iterator begin()
-  +Iterator end()
-  +Iterator rbegin()
-  +Iterator rend()
-  +ConstIterator cbegin() const
-  +ConstIterator cend() const
-  +ConstIterator begin() const
-  +ConstIterator end() const
-  +void Print() const
-  +friend std::ostream& operator<<(std::ostream&, const LinkList&)
+    - Node* head
+    - Node* tail
+    - int count
+    + LinkList()
+    + explicit LinkList(const T& data)
+    + ~LinkList()
+    + int getCount() const
+    + bool isEmpty() const
+    + bool isExisted(const T& data) const
+    + bool modify(const T& oldData, const T& newData)
+    + bool pushBack(const T& data)
+    + bool pushFront(const T& data)
+    + bool popBack()
+    + bool popFront()
+    + Iterator begin()
+    + Iterator end()
+    + ConstIterator cbegin() const
+    + ConstIterator cend() const
+    + void print() const
 }
 
-class Node<T> {
-  -T data
-  -Node* prev
-  -Node* next
-  +Node(T, Node* = nullptr, Node* = nullptr)
-  +~Node()
-  +T getData() const
-  +void setData(T)
-  +Node* getNext() const
-  +void setNext(Node*)
-  +Node* getPrev() const
-  +void setPrev(Node*)
+' 定义Node内部类
+class Node {
+    - T data
+    - Node* prev
+    - Node* next
+    + Node(T data, Node* prev = nullptr, Node* next = nullptr)
+    + T& getData()
+    + const T& getData() const
+    + Node* getNext()
+    + const Node* getNext() const
+    + void setNext(Node* newNext)
+    + Node* getPrev()
+    + const Node* getPrev() const
+    + void setPrev(Node* newPrev)
 }
 
-class Iterator<T> {
-  -Node* current
-  -LinkList<T>* list
-  +Iterator(Node*, LinkList*)
-  +T& operator*() const
-  +Iterator& operator++()
-  +Iterator operator++(int)
-  +Iterator& operator--()
-  +Iterator operator--(int)
-  +bool operator==(const Iterator&) const
-  +bool operator!=(const Iterator&) const
-  +bool Add(const T&)
-  +bool Delete()
-  +bool Modify(const T&)
-  +Iterator Find(const T&)
+' 定义Iterator类
+class Iterator {
+    - Node* current
+    - LinkList<T>* list
+    + Iterator(Node* node, LinkList<T>* list)
+    + T& operator*() const
+    + Iterator& operator++()
+    + Iterator operator++(int)
+    + Iterator& operator--()
+    + Iterator operator--(int)
+    + bool operator==(const Iterator& other) const
+    + bool operator!=(const Iterator& other) const
+    + bool insertAfter(const T& data)
+    + bool deleteNext()
+    + bool modify(const T& newData)
+    + Iterator find(const T& data)
 }
 
-class ConstIterator<T> {
-  -const Node* current
-  +ConstIterator(const Node*)
-  +const T& operator*() const
-  +ConstIterator& operator++()
-  +ConstIterator operator++(int)
-  +ConstIterator& operator--()
-  +ConstIterator operator--(int)
-  +bool operator==(const ConstIterator&) const
-  +bool operator!=(const ConstIterator&) const
+' 定义ConstIterator类
+class ConstIterator {
+    - const Node* current
+    + ConstIterator(const Node* node)
+    + const T& operator*() const
+    + ConstIterator& operator++()
+    + ConstIterator operator++(int)
+    + ConstIterator& operator--()
+    + ConstIterator operator--(int)
+    + bool operator==(const ConstIterator& other) const
+    + bool operator!=(const ConstIterator& other) const
 }
 
-LinkList *-- Node
-LinkList *-- Iterator
-LinkList *-- ConstIterator
+' 关联关系
+LinkList *-- Node : contains
+LinkList o-- Iterator : uses
+LinkList o-- ConstIterator : uses
+
+' 备注方法功能
+note right of LinkList::pushBack
+    在链表尾部添加元素
+end note
+
+note right of LinkList::pushFront
+    在链表头部插入元素
+end note
+
+note right of LinkList::popBack
+    删除链表尾部元素
+end note
+
+note right of LinkList::popFront
+    删除链表头部元素
+end note
+
+note right of LinkList::modify
+    修改链表中指定值的元素
+end note
+
+note right of Iterator::insertAfter
+    在当前节点后插入新元素
+end note
+
+note right of Iterator::deleteNext
+    删除当前节点的下一个节点
+end note
+
+note right of Node::getData
+    获取节点存储的数据
+end note
+
 @enduml
