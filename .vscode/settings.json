@@ -59,6 +59,8 @@
         "fstream": "cpp",
         "iomanip": "cpp",
         "map": "cpp",
-        "__tree": "cpp"
+        "__tree": "cpp",
+        "charconv": "cpp",
+        "forward_list": "cpp"
     }
 }
