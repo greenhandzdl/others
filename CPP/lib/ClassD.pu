@@ -1,0 +1,35 @@
+@startuml
+class main {
+  +main()
+  +load_library(path: String): LibraryHandle
+  +get_function<FuncType>(handle: LibraryHandle, name: String): FuncType
+}
+
+class load_library {
+  +load_library(path: String): LibraryHandle
+}
+
+class get_function {
+  +get_function<FuncType>(handle: LibraryHandle, name: String): FuncType
+}
+
+class LibraryHandle {
+  +LibraryHandle(handle: void*, deleter: function)
+  +get(): void*
+}
+
+class dlfcn {
+  +dlopen(path: String, flag: int): void*
+  +dlclose(handle: void*): void
+  +dlsym(handle: void*, name: String): void*
+  +dlerror(): String
+}
+
+main --> load_library
+main --> get_function
+main --> LibraryHandle
+load_library --> LibraryHandle
+load_library --> dlfcn
+get_function --> dlfcn
+LibraryHandle --> dlfcn
+@enduml

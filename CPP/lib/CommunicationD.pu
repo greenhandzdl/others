@@ -1,0 +1,41 @@
+@startuml
+actor 用户
+participant "main()" as main
+participant "load_library()" as load_lib
+participant "get_function()" as get_func
+participant "LibraryHandle" as lib_handle
+participant "dlfcn.h" as dlfcn
+
+用户 -> main: 执行程序
+main -> load_lib: load_library("./libmylib.so")
+load_lib -> dlfcn: dlopen("./libmylib.so", RTLD_LAZY)
+dlfcn --> load_lib: 返回 raw_handle
+load_lib -> lib_handle: 创建 LibraryHandle(raw_handle, dl_deleter)
+load_lib --> main: 返回 LibraryHandle
+main -> get_func: get_function<hello_t>(handle1, "hello")
+get_func -> dlfcn: dlsym(handle1.get(), "hello")
+dlfcn --> get_func: 返回 func
+get_func --> main: 返回 func
+main -> func: hello()
+func --> main: 执行 hello 函数
+
+main -> load_lib: load_library("./libmylib.so")
+load_lib -> lib_handle: 检查缓存
+lib_handle --> load_lib: 返回缓存的 handle
+load_lib --> main: 返回 LibraryHandle
+main -> get_func: get_function<add_t>(handle2, "add")
+get_func -> dlfcn: dlsym(handle2.get(), "add")
+dlfcn --> get_func: 返回 func
+get_func --> main: 返回 func
+main -> func: add(3, 5)
+func --> main: 返回结果 8
+
+main -> load_lib: load_library("./libmylib.so")
+load_lib -> lib_handle: 检查缓存
+lib_handle --> load_lib: 返回缓存的 handle
+load_lib --> main: 返回 LibraryHandle
+main -> func: add(7, 2)
+func --> main: 返回结果 9
+
+main --> 用户: 程序结束
+@enduml
