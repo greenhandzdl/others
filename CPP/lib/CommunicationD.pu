@@ -1,41 +1,35 @@
 @startuml
-actor 用户
-participant "main()" as main
-participant "load_library()" as load_lib
-participant "get_function()" as get_func
-participant "LibraryHandle" as lib_handle
-participant "dlfcn.h" as dlfcn
+actor User
+participant main
+participant LibraryCache as Cache
+participant "std::shared_ptr<void>" as SharedPtr
+participant "std::unique_ptr<void, decltype(&dlclose)>" as UniquePtr
 
-用户 -> main: 执行程序
-main -> load_lib: load_library("./libmylib.so")
-load_lib -> dlfcn: dlopen("./libmylib.so", RTLD_LAZY)
-dlfcn --> load_lib: 返回 raw_handle
-load_lib -> lib_handle: 创建 LibraryHandle(raw_handle, dl_deleter)
-load_lib --> main: 返回 LibraryHandle
-main -> get_func: get_function<hello_t>(handle1, "hello")
-get_func -> dlfcn: dlsym(handle1.get(), "hello")
-dlfcn --> get_func: 返回 func
-get_func --> main: 返回 func
-main -> func: hello()
-func --> main: 执行 hello 函数
-
-main -> load_lib: load_library("./libmylib.so")
-load_lib -> lib_handle: 检查缓存
-lib_handle --> load_lib: 返回缓存的 handle
-load_lib --> main: 返回 LibraryHandle
-main -> get_func: get_function<add_t>(handle2, "add")
-get_func -> dlfcn: dlsym(handle2.get(), "add")
-dlfcn --> get_func: 返回 func
-get_func --> main: 返回 func
-main -> func: add(3, 5)
-func --> main: 返回结果 8
-
-main -> load_lib: load_library("./libmylib.so")
-load_lib -> lib_handle: 检查缓存
-lib_handle --> load_lib: 返回缓存的 handle
-load_lib --> main: 返回 LibraryHandle
-main -> func: add(7, 2)
-func --> main: 返回结果 9
-
-main --> 用户: 程序结束
+User -> main: Run program
+main -> Cache: load("./libmylib.so")
+Cache -> Cache: Check cache for "./libmylib.so"
+Cache -> Cache: Not found, load library
+Cache -> UniquePtr: Create unique pointer
+Cache -> SharedPtr: Create shared pointer
+Cache -> Cache: Update cache with new entry
+main -> SharedPtr: Get function "hello"
+SharedPtr -> Cache: Get raw pointer
+Cache -> main: Return function pointer
+main -> main: Call hello()
+main -> Cache: load("./libmylib.so")
+Cache -> Cache: Check cache for "./libmylib.so"
+Cache -> Cache: Found, update last access
+main -> SharedPtr: Get function "add"
+SharedPtr -> Cache: Get raw pointer
+Cache -> main: Return function pointer
+main -> main: Call add(3, 5)
+main -> Cache: clean_expired()
+Cache -> Cache: Clean expired entries
+main -> Cache: load("./libmylib.so")
+Cache -> Cache: Check cache for "./libmylib.so"
+Cache -> Cache: Found, update last access
+main -> SharedPtr: Get function "add"
+SharedPtr -> Cache: Get raw pointer
+Cache -> main: Return function pointer
+main -> main: Call add(7, 2)
 @enduml

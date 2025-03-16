@@ -1,35 +1,21 @@
 @startuml
-class main {
-  +main()
-  +load_library(path: String): LibraryHandle
-  +get_function<FuncType>(handle: LibraryHandle, name: String): FuncType
+class LibraryCache {
+  -std::map<std::string, CacheEntry> cache_
+  -std::mutex mutex_
+  -std::atomic<bool> cleaner_running_
+  -const std::chrono::seconds cleanup_interval_
+  +LibraryCache()
+  +~LibraryCache()
+  +std::shared_ptr<void> load(const std::string& path)
+  +void clean_expired()
+  +static void HandleDeleter(void* handle)
 }
 
-class load_library {
-  +load_library(path: String): LibraryHandle
-}
+struct CacheEntry {
+    -std::unique_ptr<void, decltype(&dlclose)> unique_handle
+    -std::weak_ptr<void> weak_handle
+    -std::chrono::steady_clock::time_point last_access
+  }
 
-class get_function {
-  +get_function<FuncType>(handle: LibraryHandle, name: String): FuncType
-}
-
-class LibraryHandle {
-  +LibraryHandle(handle: void*, deleter: function)
-  +get(): void*
-}
-
-class dlfcn {
-  +dlopen(path: String, flag: int): void*
-  +dlclose(handle: void*): void
-  +dlsym(handle: void*, name: String): void*
-  +dlerror(): String
-}
-
-main --> load_library
-main --> get_function
-main --> LibraryHandle
-load_library --> LibraryHandle
-load_library --> dlfcn
-get_function --> dlfcn
-LibraryHandle --> dlfcn
+LibraryCache "1" *-- "0..*" CacheEntry : contains
 @enduml
