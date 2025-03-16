@@ -1,4 +1,3 @@
-// main.cpp
 #include <iostream>
 #include <dlfcn.h>
 #include <memory>
@@ -148,3 +147,5 @@ int main() {
     }
     return 0;
 }
+
+// g++ main.cpp -o main -ldl
