@@ -3,7 +3,7 @@ actor User
 participant main
 participant LibraryCache as Cache
 participant "std::shared_ptr<void>" as SharedPtr
-participant "std::unique_ptr<void, decltype(&dlclose)>" as UniquePtr
+participant "std::unique_ptr<void, int(*)(void*)noexcept>" as UniquePtr
 
 User -> main: Run program
 main -> Cache: load("./libmylib.so")

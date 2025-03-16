@@ -12,9 +12,10 @@ class LibraryCache {
 }
 
 struct CacheEntry {
-    -std::unique_ptr<void, decltype(&dlclose)> unique_handle
+    -std::unique_ptr<void, int(*)(void*)noexcept> unique_handle
     -std::weak_ptr<void> weak_handle
     -std::chrono::steady_clock::time_point last_access
+    +CacheEntry(std::unique_ptr<void, int(*)(void*)noexcept>&& uh, std::weak_ptr<void> wh, std::chrono::steady_clock::time_point la)
   }
 
 LibraryCache "1" *-- "0..*" CacheEntry : contains
