@@ -1,35 +1,42 @@
 @startuml
 actor User
-participant main
+participant main as Main
 participant LibraryCache as Cache
-participant "std::shared_ptr<void>" as SharedPtr
-participant "std::unique_ptr<void, int(*)(void*)noexcept>" as UniquePtr
+participant dlfcn as DynamicLoader
+participant libmylib.so as LibMyLib
 
-User -> main: Run program
-main -> Cache: load("./libmylib.so")
-Cache -> Cache: Check cache for "./libmylib.so"
-Cache -> Cache: Not found, load library
-Cache -> UniquePtr: Create unique pointer
-Cache -> SharedPtr: Create shared pointer
-Cache -> Cache: Update cache with new entry
-main -> SharedPtr: Get function "hello"
-SharedPtr -> Cache: Get raw pointer
-Cache -> main: Return function pointer
-main -> main: Call hello()
-main -> Cache: load("./libmylib.so")
-Cache -> Cache: Check cache for "./libmylib.so"
-Cache -> Cache: Found, update last access
-main -> SharedPtr: Get function "add"
-SharedPtr -> Cache: Get raw pointer
-Cache -> main: Return function pointer
-main -> main: Call add(3, 5)
-main -> Cache: clean_expired()
-Cache -> Cache: Clean expired entries
-main -> Cache: load("./libmylib.so")
-Cache -> Cache: Check cache for "./libmylib.so"
-Cache -> Cache: Found, update last access
-main -> SharedPtr: Get function "add"
-SharedPtr -> Cache: Get raw pointer
-Cache -> main: Return function pointer
-main -> main: Call add(7, 2)
+User -> Main : Start Program
+Main -> Cache : load("./libmylib.so")
+Cache -> DynamicLoader : dlopen("./libmylib.so")
+DynamicLoader --> Cache : returns shared_ptr<void>
+Cache --> Main : returns shared_ptr<void>
+
+Main -> Cache : get_function<HelloFunc>("hello")
+Cache -> LibMyLib : dlsym("hello")
+LibMyLib --> Cache : returns function pointer
+Cache --> Main : returns HelloFunc
+
+Main -> HelloFunc : hello()
+HelloFunc --> Main : prints message
+
+Main -> Cache : load("./libmylib.so") (cache hit)
+Cache --> Main : returns cached shared_ptr<void>
+
+Main -> Cache : get_function<AddFunc>("add")
+Cache -> LibMyLib : dlsym("add")
+LibMyLib --> Cache : returns function pointer
+Cache --> Main : returns AddFunc
+
+Main -> AddFunc : add(3, 5)
+AddFunc --> Main : returns 8
+
+Main -> Cache : load("./libmylib.so") (temporary load)
+Cache -> DynamicLoader : dlopen("./libmylib.so")
+DynamicLoader --> Cache : returns shared_ptr<void>
+Cache --> Main : returns shared_ptr<void>
+
+Main -> Cache : load("./libmylib.so") (still valid)
+Cache --> Main : returns cached shared_ptr<void>
+
+Main --> User : End Program
 @enduml

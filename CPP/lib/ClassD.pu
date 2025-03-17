@@ -1,22 +1,33 @@
 @startuml
 class LibraryCache {
-  -std::map<std::string, CacheEntry> cache_
-  -std::mutex mutex_
-  -std::atomic<bool> cleaner_running_
-  -const std::chrono::seconds cleanup_interval_
-  +LibraryCache()
-  +~LibraryCache()
-  +std::shared_ptr<void> load(const std::string& path)
-  +void clean_expired()
-  +static void HandleDeleter(void* handle)
+    - unordered_map<string, CacheEntry> cache_
+    - mutex mutex_
+    - atomic<bool> cleaner_running_
+    - const chrono::seconds cleanup_interval_
+
+    + LibraryCache()
+    + ~LibraryCache()
+    + shared_ptr<void> load(string path)
+    + void clean_expired()
 }
 
 struct CacheEntry {
-    -std::unique_ptr<void, int(*)(void*)noexcept> unique_handle
-    -std::weak_ptr<void> weak_handle
-    -std::chrono::steady_clock::time_point last_access
-    +CacheEntry(std::unique_ptr<void, int(*)(void*)noexcept>&& uh, std::weak_ptr<void> wh, std::chrono::steady_clock::time_point la)
-  }
+        weak_ptr<void> weak_handle
+        time_point last_access
+}
+class HelloFunc {
+    + void hello()
+}
 
-LibraryCache "1" *-- "0..*" CacheEntry : contains
+class AddFunc {
+    + int add(int, int)
+}
+
+LibraryCache --> CacheEntry : contains
+LibraryCache --> unordered_map : uses
+LibraryCache --> mutex : uses
+LibraryCache --> atomic : uses
+HelloFunc <|-- FuncType
+AddFunc <|-- FuncType
+
 @enduml

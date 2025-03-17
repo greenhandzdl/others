@@ -1,31 +1,33 @@
+// main.cpp
 #include <iostream>
 #include <dlfcn.h>
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <mutex>
 #include <chrono>
 #include <thread>
 #include <atomic>
+#include <functional>
 
 class LibraryCache {
 private:
     struct CacheEntry {
-        std::unique_ptr<void, int(*)(void*)noexcept> unique_handle;
         std::weak_ptr<void> weak_handle;
         std::chrono::steady_clock::time_point last_access;
-
-        CacheEntry(std::unique_ptr<void, int(*)(void*)noexcept>&& uh,
-                  std::weak_ptr<void> wh,
-                  std::chrono::steady_clock::time_point la)
-            : unique_handle(std::move(uh)),
-              weak_handle(wh),
-              last_access(la) {}
     };
 
-    std::map<std::string, CacheEntry> cache_;
+    std::unordered_map<std::string, CacheEntry> cache_;
     std::mutex mutex_;
     std::atomic<bool> cleaner_running_{true};
     const std::chrono::seconds cleanup_interval_{5};
+
+    // 自定义删除器
+    static void HandleDeleter(void* handle) {
+        if (handle) {
+            dlclose(handle);
+            std::cout << "[Cache] Library unloaded\n";
+        }
+    }
 
 public:
     LibraryCache() {
@@ -44,12 +46,17 @@ public:
     std::shared_ptr<void> load(const std::string& path) {
         std::lock_guard<std::mutex> lock(mutex_);
 
-        // 检查现有缓存
-        if (auto it = cache_.find(path); it != cache_.end()) {
-            if (auto sptr = it->second.weak_handle.lock()) {
-                it->second.last_access = std::chrono::steady_clock::now();
-                std::cout << "[Cache] Using cached: " << path << "\n";
-                return sptr;
+        // 使用结构化绑定遍历查找
+        bool found = false;
+        for (auto& [key, entry] : cache_) {
+            if (key == path) {
+                found = true;
+                if (auto sptr = entry.weak_handle.lock()) {
+                    entry.last_access = std::chrono::steady_clock::now();
+                    std::cout << "[Cache] Using cached: " << path << "\n";
+                    return sptr;
+                }
+                break;
             }
         }
 
@@ -57,27 +64,19 @@ public:
         void* raw = dlopen(path.c_str(), RTLD_LAZY);
         if (!raw) throw std::runtime_error(dlerror());
 
-        // 创建符合dlclose签名的删除器
-        auto deleter = [](void* h) noexcept -> int {
-            return h ? dlclose(h) : 0;
-        };
-
-        // 构造unique_ptr（所有权持有者）
-        std::unique_ptr<void, int(*)(void*)noexcept> unique(raw, deleter);
-        
-        // 创建shared_ptr（观察者，不实际管理资源）
+        // 直接使用shared_ptr管理资源
         auto shared = std::shared_ptr<void>(
-            unique.release(),  // 转移所有权
-            [](void*){}        // 空删除器
+            raw, 
+            [](void* h) {
+                HandleDeleter(h);
+            }
         );
 
-        // 插入缓存条目
-        cache_.try_emplace(
-            path,
-            std::move(unique),            // unique_ptr转移进map
-            std::weak_ptr<void>(shared),  // 创建weak_ptr观察
+        // 更新缓存
+        cache_[path] = {
+            std::weak_ptr<void>(shared),
             std::chrono::steady_clock::now()
-        );
+        };
 
         std::cout << "[Cache] New loaded: " << path << "\n";
         return shared;
@@ -87,13 +86,18 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
         auto now = std::chrono::steady_clock::now();
 
+        // 使用现代遍历语法
         for (auto it = cache_.begin(); it != cache_.end();) {
-            bool expired = it->second.weak_handle.expired();
-            bool timeout = (now - it->second.last_access) > std::chrono::seconds(30);
+            const auto& [path, entry] = *it;
+            
+            bool need_remove = 
+                entry.weak_handle.expired() || 
+                (now - entry.last_access) > std::chrono::seconds(30);
 
-            if (expired || timeout) {
-                std::cout << "[Cache] Clean: " << it->first 
-                          << (expired ? " (expired)" : " (timeout)") << "\n";
+            if (need_remove) {
+                std::cout << "[Cache] Clean: " << path
+                          << (entry.weak_handle.expired() ? " (expired)" : " (timeout)")
+                          << "\n";
                 it = cache_.erase(it);
             } else {
                 ++it;
@@ -105,39 +109,40 @@ public:
 // 全局缓存实例
 LibraryCache global_cache;
 
-// 函数指针获取模板
-template <typename FuncPtr>
-FuncPtr get_func(const std::shared_ptr<void>& handle, const char* name) {
-    dlerror(); // 清除旧错误
-    auto func = reinterpret_cast<FuncPtr>(dlsym(handle.get(), name));
+// 改进的函数指针获取模板
+template <typename FuncType>
+FuncType get_function(const std::shared_ptr<void>& lib, const char* name) {
+    dlerror();
+    auto func = reinterpret_cast<FuncType>(dlsym(lib.get(), name));
     if (const char* err = dlerror()) {
-        throw std::runtime_error(err);
+        throw std::runtime_error("Symbol not found: " + std::string(name));
     }
     return func;
 }
 
-// 动态库函数类型声明
-using hello_t = void(*)();
-using add_t = int(*)(int, int);
-
+// 使用示例
 int main() {
     try {
+        // 定义函数类型
+        using HelloFunc = void(*)();
+        using AddFunc = int(*)(int, int);
+
         // 第一次加载
         auto lib1 = global_cache.load("./libmylib.so");
-        auto hello = get_func<hello_t>(lib1, "hello");
+        auto hello = get_function<HelloFunc>(lib1, "hello");
         hello();
 
-        // 第二次加载（使用缓存）
+        // 第二次加载（命中缓存）
         auto lib2 = global_cache.load("./libmylib.so");
-        auto add = get_func<add_t>(lib2, "add");
+        auto add = get_function<AddFunc>(lib2, "add");
         std::cout << "3 + 5 = " << add(3, 5) << "\n";
 
-        // 测试缓存失效
+        // 测试缓存过期
         {
             auto temp = global_cache.load("./libmylib.so");
         }
 
-        // 第三次加载（缓存仍有效）
+        // 第三次加载（仍然有效）
         auto lib3 = global_cache.load("./libmylib.so");
         std::cout << "7 + 2 = " << add(7, 2) << "\n";
 
