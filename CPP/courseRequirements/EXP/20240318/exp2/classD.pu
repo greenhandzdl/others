@@ -1,0 +1,51 @@
+@startuml
+class Complex {
+  - T re
+  - T im
+  + Complex(T r = 0, T i = 0)
+  + Complex(const ComplexExpr<Expr>& expr)
+  + Complex& operator=(const ComplexExpr<Expr>& expr)
+  + T real() const
+  + T imag() const
+}
+
+class ComplexExpr {
+  + auto real() const
+  + auto imag() const
+}
+
+class ComplexOP {
+  - const E1& lhs
+  - const E2& rhs
+  + ComplexOP(const E1& a, const E2& b)
+  + auto real() const
+  + auto imag() const
+}
+
+class AddOp {
+  + static Result<T> compute(T a_re, T a_im, T b_re, T b_im)
+}
+
+class SubOp {
+  + static Result<T> compute(T a_re, T a_im, T b_re, T b_im)
+}
+
+class MulOp {
+  + static Result<T> compute(T a_re, T a_im, T b_re, T b_im)
+}
+
+class Result {
+  - T real_part
+  - T imag_part
+}
+
+Complex --> ComplexExpr
+ComplexOP --> ComplexExpr
+ComplexOP --> Complex
+AddOp --> ComplexOP
+SubOp --> ComplexOP
+MulOp --> ComplexOP
+Result --> AddOp
+Result --> SubOp
+Result --> MulOp
+@enduml

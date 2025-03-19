@@ -1,0 +1,24 @@
+@startuml
+actor User
+participant main
+participant "Complex<double> a" as a
+participant "Complex<double> b" as b
+participant "Complex<double> c" as c
+participant "Complex<double> result" as result
+participant "ComplexOP a+b" as add
+participant "ComplexOP (a+b)*c" as mul
+
+User -> main: 调用main函数
+main -> a: 创建Complex对象a(1.0, 2.0)
+main -> b: 创建Complex对象b(3.0, 4.0)
+main -> c: 创建Complex对象c(5.0, 6.0)
+main -> add: 计算a + b
+a -> add: 提供real和imag
+b -> add: 提供real和imag
+main -> mul: 计算add * c
+add -> mul: 提供real和imag
+c -> mul: 提供real和imag
+main -> result: 创建Complex对象result
+mul -> result: 提供real和imag
+main -> User: 输出结果
+@enduml

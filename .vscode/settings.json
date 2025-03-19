@@ -61,6 +61,7 @@
         "map": "cpp",
         "__tree": "cpp",
         "charconv": "cpp",
-        "forward_list": "cpp"
+        "forward_list": "cpp",
+        "future": "cpp"
     }
 }
