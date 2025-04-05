@@ -52,8 +52,10 @@ def read_input_file(input_file):
 
 def build_request_url(id_param, text):
     """构建请求URL"""
+    # 计算length参数：字符总长度除以9再加1
+    length_param = len(text) // 9 + 1
     encoded_text = urllib.parse.quote(text)
-    return f"{SERVER_URL}/voice/vits?id={id_param}&text={encoded_text}"
+    return f"{SERVER_URL}/voice/vits?id={id_param}&length={length_param}&text={encoded_text}"
 
 def download_voice(url, output_file, text):
     """下载语音文件并保存"""
