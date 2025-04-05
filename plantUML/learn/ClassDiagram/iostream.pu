@@ -1,0 +1,53 @@
+@startuml
+class ios_base {
+  +static bool sync_with_stdio(bool sync = true)
+  +static void setf(ios_base::fmtflags setbits)
+  +static void unsetf(ios_base::fmtflags unsetbits)
+  +static ios_base::fmtflags flags() const
+  +static ios_base::fmtflags flags(ios_base::fmtflags flags)
+  +static streamsize width() const
+  +static streamsize width(streamsize wide)
+  +static streamsize precision() const
+  +static streamsize precision(streamsize prec)
+  +static locale getloc() const
+  +static void imbue(const locale& loc)
+}
+
+class istream {
+  +istream& operator>>(int& value)
+  +istream& operator>>(unsigned int& value)
+  +istream& operator>>(long& value)
+  +istream& operator>>(unsigned long& value)
+  +istream& operator>>(float& value)
+  +istream& operator>>(double& value)
+  +istream& operator>>(long double& value)
+  +istream& operator>>(char* s)
+  +istream& operator>>(char& c)
+  +istream& operator>>(unsigned char& c)
+  +istream& operator>>(signed char& c)
+  +istream& operator>>(string& str)
+}
+
+class ostream {
+  +ostream& operator<<(int value)
+  +ostream& operator<<(unsigned int value)
+  +ostream& operator<<(long value)
+  +ostream& operator<<(unsigned long value)
+  +ostream& operator<<(float value)
+  +ostream& operator<<(double value)
+  +ostream& operator<<(long double value)
+  +ostream& operator<<(const char* s)
+  +ostream& operator<<(char c)
+  +ostream& operator<<(unsigned char c)
+  +ostream& operator<<(signed char c)
+  +ostream& operator<<(const string& str)
+}
+
+class iostream  {
+}
+
+ios_base <|-- istream
+ios_base <|-- ostream
+istream <|-- iostream
+ostream <|-- iostream
+@enduml
