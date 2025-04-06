@@ -4,6 +4,7 @@
 import subprocess
 import datetime
 import os
+import platform
 from PIL import Image, ImageDraw, ImageFont
 import sys
 
@@ -32,17 +33,65 @@ def text_to_image(text, output_path):
     将文本转换为图像并保存
     """
     # 设置字体和大小
-    try:
-        # 尝试使用系统字体，根据操作系统可能需要调整路径
-        font = ImageFont.truetype("/System/Library/Fonts/Monaco.ttf", 12)  # macOS字体路径
-    except IOError:
-        # 如果找不到指定字体，使用默认字体
+    font = None
+    # 获取操作系统类型
+    system = platform.system()
+    
+    # 根据不同操作系统提供字体路径列表
+    font_paths = []
+    
+    if system == "Darwin":  # macOS
+        font_paths = [
+            "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+            "/Library/Fonts/Arial Unicode.ttf",
+            "/System/Library/Fonts/PingFang.ttc",
+            "/System/Library/Fonts/STHeiti Light.ttc"
+        ]
+    elif system == "Windows":
+        font_paths = [
+            "C:\\Windows\\Fonts\\msyh.ttc",  # 微软雅黑
+            "C:\\Windows\\Fonts\\simsun.ttc",  # 宋体
+            "C:\\Windows\\Fonts\\simhei.ttf",  # 黑体
+            "C:\\Windows\\Fonts\\Arial Unicode.ttf"
+        ]
+    else:  # Linux 和 BSD
+        font_paths = [
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",  # 文泉驿微米黑
+            "/usr/share/fonts/truetype/arphic/uming.ttc",  # AR PL UMing
+            "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",  # Noto Sans CJK
+            "/usr/local/share/fonts/wqy-microhei.ttc"  # BSD 可能的路径
+        ]
+    
+    # 尝试加载字体列表中的字体
+    for font_path in font_paths:
+        try:
+            font = ImageFont.truetype(font_path, 12)
+            break  # 找到可用字体后跳出循环
+        except IOError:
+            continue  # 尝试下一个字体
+    
+    # 如果所有字体都无法加载，使用默认字体
+    if font is None:
+        print(f"警告: 在{system}系统上未找到合适的字体，将使用默认字体。中文可能无法正确显示。")
         font = ImageFont.load_default()
     
     # 计算图像大小
     lines = text.split('\n')
     line_height = 15  # 行高
-    max_line_width = max([len(line) for line in lines]) * 8  # 估计每个字符的宽度
+    
+    # 改进的宽度计算方法，考虑中文字符宽度
+    def estimate_text_width(text):
+        width = 0
+        for char in text:
+            # 中文字符（包括全角标点）通常是英文字符的两倍宽
+            if ord(char) > 127:
+                width += 16  # 中文字符宽度
+            else:
+                width += 8   # 英文字符宽度
+        return width
+    
+    max_line_width = max([estimate_text_width(line) for line in lines])
     img_width = max(max_line_width, 800)  # 最小宽度800像素
     img_height = len(lines) * line_height + 20  # 额外添加一些边距
     
