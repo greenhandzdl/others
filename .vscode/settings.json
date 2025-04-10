@@ -63,6 +63,8 @@
         "charconv": "cpp",
         "forward_list": "cpp",
         "future": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "codecvt": "cpp",
+        "csignal": "cpp"
     }
 }
