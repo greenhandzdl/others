@@ -50,17 +50,6 @@ namespace contact{
         return true;
     }
 
-    template<typename Info,
-    typename = typename std::enable_if<std::is_same<Info, Infor>::value>::type>
-    bool Contact::modContact(const Str& name, Info&& info) {
-        auto it = contactStorage.find(name);
-        if (it != contactStorage.end()) {
-            it->second = std::forward<Info>(info);
-            return true;
-        }
-        return false;
-    }
-
     bool Contact::delContact(const Str& name){
         if(this->contactStorage.find(name) != this->contactStorage.end()){
             this->contactStorage.erase(name);

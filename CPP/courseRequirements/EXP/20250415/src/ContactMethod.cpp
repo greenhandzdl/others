@@ -77,10 +77,9 @@ namespace contact{
         return flag;
     }
 
-    bool ContactMethod::saveAsFile(const Contact& contact,const Str& filename = DEFALULT_FILE_NAME){
-        // binary and append
-        std::ofstream file(reinterpret_cast<const char *> (filename.c_str())
-                            , std::ios::binary | std::ios::out |std::ios::app);
+    bool ContactMethod::saveAsFile(const Contact& contact,const Str& filename){
+        std::string narrowFilename(filename.begin(), filename.end());
+        std::ofstream file(narrowFilename.c_str(), std::ios::binary | std::ios::out | std::ios::app);
         if(!file.is_open()){
             std::wcerr << L"File open failed" << std::endl;
             return false;
@@ -99,10 +98,11 @@ namespace contact{
         return true;
     }
 
-    bool ContactMethod::loadFromFile(Contact& contact,const Str& filename = DEFALULT_FILE_NAME){
+    bool ContactMethod::loadFromFile(Contact& contact,const Str& filename){
         Str name;
         Infor info;
-        std::ifstream file(reinterpret_cast<const char *> ( filename.c_str() ), // may be a bug
+        std::string narrowFilename(filename.begin(), filename.end());
+        std::ifstream file(narrowFilename.c_str(), // may be a bug
                             std::ios::binary|std::ios::in);
         if(!file.is_open()){
             std::wcerr << L"File open failed" << std::endl;

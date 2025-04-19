@@ -10,18 +10,28 @@
 #ifndef C_REQ_HIDE
 #define C_REQ_HIDE
 namespace contact{
+
     // Forward Declaration
     class ContactSync;
     class ContactMethod;
+    class Contact;
+    class ContactSync {
+        private:
+            std::thread syncThread;
+            void autoSave(Contact& contact);
     
-
+        public:
+            ContactSync(Contact& contact);
+    
+            ~ContactSync();
+        };
 
 
     class Contact{
     private:
         DB contactStorage;
         std::atomic<unsigned short int> flags = 0;
-        ContactSync sync{*this};
+        ContactSync contactSync = *this ;
     
     public:
         friend class ContactMethod;
@@ -64,7 +74,15 @@ namespace contact{
                         std::is_same<Info, Infor>::value
                 >::type
             >
-        bool modContact(const Str&, Info&&);
+        bool modContact(const Str& name, Info&& info){
+            auto it = contactStorage.find(name);
+            if (it != contactStorage.end()) {
+                it->second = std::forward<Info>(info);
+                return true;
+            }
+            return false;
+        }
+    
 
 
         bool delContact(const Str&);//删除找到的第一个
@@ -79,16 +97,7 @@ namespace contact{
        
     };
 
-    class ContactSync {
-        private:
-            std::thread syncThread;
-            void autoSave(Contact& contact);
-    
-        public:
-            ContactSync(Contact& contact);
-    
-            ~ContactSync();
-        };
+
 
     static class ContactMethod{
     public:
