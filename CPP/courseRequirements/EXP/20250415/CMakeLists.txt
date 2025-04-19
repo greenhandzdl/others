@@ -14,6 +14,8 @@ project(contact
     LANGUAGES CXX #什么语言写的
 )
  
+# add_subdirectory(src) # Add the src dir to the search path
+
 # add_definitions(-DDEBUG) # Add a preprocessor definition
 # DEBUG
 

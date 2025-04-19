@@ -10,6 +10,13 @@
 #ifndef C_REQ_HIDE
 #define C_REQ_HIDE
 namespace contact{
+    // Forward Declaration
+    class ContactSync;
+    class ContactMethod;
+    
+
+
+
     class Contact{
     private:
         DB contactStorage;
@@ -38,18 +45,9 @@ namespace contact{
             return flags & flag;
         }
     
-        Contact(unsigned short int _flags = LOAD_FROM_FILE_FLAG)
-            : flags(_flags){
-                if(isFlagSet(LOAD_FROM_FILE_FLAG)){
-                    ContactMethod::loadFromFile(*this);
-                }
-            }
+        Contact(unsigned short int _flags = LOAD_FROM_FILE_FLAG);
     
-        ~Contact(){
-            contactStorage.clear();
-            if(isFlagSet(SAVE_WHEN_EXIT_FLAG))
-                ContactMethod::saveAsFile(*this);
-        }
+        ~Contact();
 
         void showContact(void) const;
 
@@ -75,12 +73,8 @@ namespace contact{
         };
         bool isEmptyContact(void);
         
-        void saveAsFile(void) const{
-            ContactMethod::saveAsFile(*this);
-        };
-        void loadFromFile(void){
-            ContactMethod::loadFromFile(*this);
-        };
+        void saveAsFile(void) const;
+        void loadFromFile(void);
 
        
     };
@@ -88,25 +82,12 @@ namespace contact{
     class ContactSync {
         private:
             std::thread syncThread;
-            void autoSave(Contact& contact) {
-                while (true) {
-                    std::this_thread::sleep_for(std::chrono::minutes(30)); // Check every minute
-                    if (contact.isFlagSet(Contact::AUTOSAVE_FLAG)) {
-                        ContactMethod::saveAsFile(contact);
-                    }
-                }
-            }
+            void autoSave(Contact& contact);
     
         public:
-            ContactSync(Contact& contact) {
-                syncThread = std::thread(&ContactSync::autoSave, this, std::ref(contact));
-            }
+            ContactSync(Contact& contact);
     
-            ~ContactSync() {
-                if (syncThread.joinable()) {
-                    syncThread.join();
-                }
-            }
+            ~ContactSync();
         };
 
     static class ContactMethod{
