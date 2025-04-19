@@ -1,0 +1,48 @@
+@startuml
+
+namespace contact {
+
+class Contact {
+    - DB contactStorage
+    - atomic<unsigned short int> flags
+    - ContactSync sync
+    + setFlag(ContactFlags flag)
+    + clearFlag(ContactFlags flag)
+    + isFlagSet(ContactFlags flag): bool
+    + showContact(): void
+    + addContact(Str name, Infor info): bool
+    + addContact(pair<Str, Infor> put_pair): bool
+    + findContact(Str name): bool
+    + sortContact(Str property, DB results): bool
+    + modContact(Str name, Info info): bool
+    + delContact(Str name): bool
+    + cleanContact(): void
+    + isEmptyContact(): bool
+    + saveAsFile(): void
+    + loadFromFile(): void
+}
+
+class ContactSync {
+    - thread syncThread
+    + autoSave(Contact contact): void
+}
+
+class ContactMethod {
+    + showMenu(): void
+    + askUserForInputToAddContact(Contact contact): bool
+    + saveAsFile(Contact contact, Str filename): bool
+    + loadFromFile(Contact contact, Str filename): bool
+    + uTUIShow(Str message): void
+    + aLineOfForm(Num num): void
+    + tableHeader(): void
+    + WaitForUserInput(): void
+    + iWaitForUserInput(): auto
+    + cleanUserInput(): void
+}
+
+Contact *-- ContactSync
+Contact *-- ContactMethod
+ContactSync *-- ContactMethod
+
+}
+@enduml

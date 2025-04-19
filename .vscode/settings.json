@@ -65,6 +65,12 @@
         "future": "cpp",
         "list": "cpp",
         "codecvt": "cpp",
-        "csignal": "cpp"
+        "csignal": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "format": "cpp",
+        "functional": "cpp",
+        "utility": "cpp",
+        "atomic": "cpp"
     }
 }
