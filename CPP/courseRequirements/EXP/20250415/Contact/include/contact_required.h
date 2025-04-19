@@ -12,7 +12,6 @@
 namespace contact{
 
     // Forward Declaration
-    class ContactSync;
     class ContactMethod;
     class Contact;
     class ContactSync {
@@ -30,8 +29,8 @@ namespace contact{
     class Contact{
     private:
         DB contactStorage;
-        std::atomic<unsigned short int> flags = 0;
-        ContactSync contactSync = *this ;
+        std::atomic<unsigned short int> flags ;
+        ContactSync contactSync { *this };
     
     public:
         friend class ContactMethod;
@@ -57,6 +56,9 @@ namespace contact{
     
         Contact(unsigned short int _flags = LOAD_FROM_FILE_FLAG);
     
+        // Contact(const Contact&) = delete;
+        // Contact& operator =(Contact &) = delete;
+
         ~Contact();
 
         void showContact(void) const;
