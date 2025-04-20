@@ -3,6 +3,19 @@
 #include <iomanip>
 
 namespace contact{
+    Contact::Contact(unsigned short initial_capacity) :flags(initial_capacity) {
+        if(isFlagSet(LOAD_FROM_FILE_FLAG)){
+            this->loadFromFile();
+        }
+    }
+
+    Contact::~Contact() {
+        if(isFlagSet(SAVE_WHEN_EXIT_FLAG)){
+            this->saveAsFile();
+        }
+        this->contactStorage.clear();
+    }
+
     void Contact::showContact(void) const{
         if(this->contactStorage.size() == 0){
             ContactMethod::uTUIShow(L"No contact");

@@ -84,9 +84,6 @@ namespace contact{
             }
             return false;
         }
-    
-
-
         bool delContact(const Str&);//删除找到的第一个
         void cleanContact(void){
             contactStorage.clear();
@@ -95,8 +92,6 @@ namespace contact{
         
         void saveAsFile(void) const;
         void loadFromFile(void);
-
-       
     };
 
 
