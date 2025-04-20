@@ -12,16 +12,36 @@
 namespace contact{
 
     // Forward Declaration
-    class ContactMethod;
     class Contact;
+    static class ContactMethod{
+        public:
+            // For User
+            static void showMenu(void);
+            static bool askUserForInputToAddContact(Contact&);
+    
+            friend class Contact;
+            friend class ContactSync;
+        private:
+            // For Contact
+            static bool saveAsFile(const Contact&,const Str& filename = DEFALULT_FILE_NAME);
+            static bool loadFromFile(Contact&,const Str& filename = DEFALULT_FILE_NAME);
+            
+            static void uTUIShow(const Str& message);
+            static void aLineOfForm(const Num);
+            static void tableHeader(void);
+    
+            static void WaitForUserInput(void);
+            static decltype(auto) iWaitForUserInput(void);
+    
+            static void cleanUserInput(void);
+    
+        }ContactMethod;
     class ContactSync {
         private:
             std::thread syncThread;
             void autoSave(Contact& contact);
-    
         public:
             ContactSync(Contact& contact);
-    
             ~ContactSync();
         };
 
@@ -44,31 +64,20 @@ namespace contact{
     
         void setFlag(ContactFlags flag) {
             flags |= flag;
-        }
-    
+        }    
         void clearFlag(ContactFlags flag) {
             flags &= ~flag;
         }
-    
         bool isFlagSet(ContactFlags flag) const {
             return flags & flag;
-        }
-    
+        }    
         Contact(unsigned short int _flags = LOAD_FROM_FILE_FLAG);
-    
-        // Contact(const Contact&) = delete;
-        // Contact& operator =(Contact &) = delete;
-
         ~Contact();
 
         void showContact(void) const;
-
         bool addContact(const Str&,const Infor&);
-
         bool addContact(const std::pair<Str,Infor>&);
-
         bool findContact(const Str&) const;
-
         bool sortContact(const Str&,DB&);//根据属性
 
         template<typename Info,
@@ -90,35 +99,13 @@ namespace contact{
         };
         bool isEmptyContact(void);
         
-        void saveAsFile(void) const;
-        void loadFromFile(void);
+        void saveAsFile(void) const{
+            ContactMethod::saveAsFile(*this);
+        }
+        void loadFromFile(void){
+            ContactMethod::loadFromFile(*this);
+        }
     };
-
-
-
-    static class ContactMethod{
-    public:
-        // For User
-        static void showMenu(void);
-        static bool askUserForInputToAddContact(Contact&);
-
-        friend class Contact;
-        friend class ContactSync;
-    private:
-        // For Contact
-        static bool saveAsFile(const Contact&,const Str& filename = DEFALULT_FILE_NAME);
-        static bool loadFromFile(Contact&,const Str& filename = DEFALULT_FILE_NAME);
-        
-        static void uTUIShow(const Str& message);
-        static void aLineOfForm(const Num);
-        static void tableHeader(void);
-
-        static void WaitForUserInput(void);
-        static decltype(auto) iWaitForUserInput(void);
-
-        static void cleanUserInput(void);
-
-    }ContactMethod;
 
 }
 

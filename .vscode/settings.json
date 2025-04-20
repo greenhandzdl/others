@@ -71,6 +71,7 @@
         "format": "cpp",
         "functional": "cpp",
         "utility": "cpp",
-        "atomic": "cpp"
+        "atomic": "cpp",
+        "iterator": "cpp"
     }
 }

@@ -2,6 +2,10 @@
 *.out
 *.o
 
+# CMake
+build/
+
+
 #binary files clean
 *.dat
 .DS_Store
@@ -43,4 +47,4 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-/.vscode
+.vscode

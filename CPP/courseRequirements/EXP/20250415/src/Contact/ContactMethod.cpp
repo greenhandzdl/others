@@ -178,6 +178,8 @@ namespace contact{
     void ContactMethod::cleanUserInput(void){
         std::wcin.clear();
         std::wcin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
 }
