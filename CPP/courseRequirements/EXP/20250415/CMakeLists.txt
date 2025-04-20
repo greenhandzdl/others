@@ -11,7 +11,7 @@ project(contact
     VERSION 1.0
     DESCRIPTION "通信录程序"
     HOMEPAGE_URL "https://github.com/greenhandzdl/others"
-    LANGUAGES CXX #什么语言写的
+    LANGUAGES CXX
 )
  
 add_subdirectory(${PROJECT_SOURCE_DIR}/Contact) # Add the src dir to the search path
