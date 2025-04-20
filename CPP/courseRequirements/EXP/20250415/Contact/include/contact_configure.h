@@ -24,10 +24,7 @@ namespace contact{
     using DB = std::unordered_map<Str,Infor>;
     constexpr CStr DEFALULT_FILE_NAME = L"backup.db";
 
-    std::wistream& operator>>(std::wistream& is, CStr& str) {
-        is.getline(str, MAX_CSTR_LEN_USE);
-        return is;
-    }
+    std::wistream& operator>>(std::wistream& is, CStr& str);
 
     //考虑到存储方便,保存会采用截断
     //对兼容性可能没有保证
@@ -47,26 +44,8 @@ namespace contact{
         =========================
         Please enter your choice: )";
 
-        std::ostream& operator<<(std::ostream& os, const Infor& inf) {
-            return os
-                << std::setw(WIDTH) << std::left << inf.phone << " " 
-                << std::setw(WIDTH) << std::left << inf.wechat << " "
-                << std::setw(WIDTH) << std::left << reinterpret_cast<const char*>(inf.address) << " "
-                << std::setw(WIDTH) << std::left << reinterpret_cast<const char*>(inf.email_address)
-                << std::setw(WIDTH) << std::left << reinterpret_cast<const char*>(inf.property)
-                << std::endl;
-        }
+        std::ostream& operator<<(std::ostream& os, const Infor& inf);
     
-        std::wostream& operator<<(std::wostream& os, const Infor& inf) {
-            return os 
-                << std::setw(WIDTH) << std::left <<  std::to_wstring(inf.phone) << L" " 
-                << std::setw(WIDTH) << std::left <<  std::to_wstring(inf.wechat) << L" "
-                << std::setw(WIDTH) << std::left <<  inf.address << L" "
-                << std::setw(WIDTH) << std::left <<  inf.email_address
-                << std::setw(WIDTH) << std::left <<  inf.property 
-                << std::endl;
-        }
-      
-
+        std::wostream& operator<<(std::wostream& os, const Infor& inf);
 }
 #endif
