@@ -18,6 +18,16 @@ namespace contact{
             // For User
             static void showMenu(void);
             static bool askUserForInputToAddContact(Contact&);
+
+            static Infor makeInfor(void){
+                return Infor{
+                    .phone = 12345,
+                    .wechat = 12345,
+                    .address = L"address",
+                    .email_address = L"email",
+                    .property = L"property",
+                };
+            };
     
             friend class Contact;
             friend class ContactSync;
@@ -86,7 +96,7 @@ namespace contact{
                         std::is_same<Info, Infor>::value
                 >::type
             >
-        bool modContact(const Str& name, Info&& info){
+        bool modContact(const Str& name, const Info&& info){
             auto it = contactStorage.find(name);
             if (it != contactStorage.end()) {
                 it->second = std::forward<Info>(info);
@@ -94,6 +104,16 @@ namespace contact{
             }
             return false;
         }
+
+        bool modContact(const Str& name, Infor info){
+            auto it = contactStorage.find(name);
+            if (it != contactStorage.end()) {
+                it->second = std::move(info);
+                return true;
+            }
+            return false;
+        }
+
         bool delContact(const Str&);//删除找到的第一个
         void cleanContact(void){
             contactStorage.clear();
