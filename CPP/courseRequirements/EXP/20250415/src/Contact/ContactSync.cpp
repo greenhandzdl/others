@@ -2,13 +2,18 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <atomic>
 
 namespace contact {
+
 void ContactSync::autoSave(Contact& contact) {
-    while (true) {
-        // This loop structure might need refinement (e.g., a way to stop it gracefully).
-        // For now, it reflects the original logic.
-        std::this_thread::sleep_for(std::chrono::minutes(30)); // Check every 30 minutes
+    // 使用类的成员变量stopFlag作为停止标志
+    
+    while (!stopFlag) {
+        // 使用条件变量或超时机制来允许更快的响应停止信号
+        std::this_thread::sleep_for(std::chrono::seconds(30)); // 使用较短的检查间隔以便更快响应停止信号
+        
+        // 检查自动保存标志并执行保存
         if (contact.isFlagSet(Contact::AUTOSAVE_FLAG)) {
             ContactMethod::saveAsFile(contact);
         }
@@ -16,22 +21,20 @@ void ContactSync::autoSave(Contact& contact) {
 }
 
 ContactSync::ContactSync(Contact& contact) {
-    // Detach the thread or manage its lifecycle carefully.
-    // Starting a potentially infinite loop in the constructor without
-    // a clear stop mechanism can be problematic.
-    // Consider using std::jthread (C++20) or a different pattern.
+    // 创建线程并传递联系人引用
     syncThread = std::thread(&ContactSync::autoSave, this, std::ref(contact));
-    // syncThread.detach(); // Example: Detach if it should run independently.
+    std::cout << "自动保存线程已启动" << std::endl;
 }
 
 ContactSync::~ContactSync() {
-    // If the thread wasn't detached, it needs to be joined or stopped.
-    // Joining an infinite loop thread here will block indefinitely.
-    // This requires a mechanism to signal the autoSave loop to terminate.
-    // For now, mirroring the original logic but acknowledging the issue.
+    // 设置停止标志，通知自动保存线程停止
+    stopFlag = true;
+    
+    // 如果线程可以加入，则等待它完成
     if (syncThread.joinable()) {
-        // Add logic here to signal the thread to stop before joining.
-        // syncThread.join(); // This will hang without a stop mechanism.
+        // 等待线程完成
+        syncThread.join();
+        std::cout << "自动保存线程已停止" << std::endl;
     }
 }
 

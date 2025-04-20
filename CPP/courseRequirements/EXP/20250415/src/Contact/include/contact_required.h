@@ -39,6 +39,7 @@ namespace contact{
     class ContactSync {
         private:
             std::thread syncThread;
+            std::atomic<bool> stopFlag{false}; // 添加停止标志作为成员变量
             void autoSave(Contact& contact);
         public:
             ContactSync(Contact& contact);
