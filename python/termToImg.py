@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+# python termToImg.py "find .  -type f -exec echo '文件: {}' \; -exec cat {} \; -exec echo '\n-----------------------------------\n' \;"
 import subprocess
 import datetime
 import os
