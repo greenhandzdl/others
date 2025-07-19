@@ -2,6 +2,8 @@
 
 [TOC]
 
+<div style="page-break-after: always;"></div>
+
 ## 通用
 
 * 正向提示词
