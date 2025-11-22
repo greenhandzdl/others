@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="297mm"
+   height="210mm"
+   viewBox="0 0 1122.5197 793.70081"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   sodipodi:docname="实体图.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.53121969"
+     inkscape:cx="603.32855"
+     inkscape:cy="260.72076"
+     inkscape:window-width="1088"
+     inkscape:window-height="980"
+     inkscape:window-x="0"
+     inkscape:window-y="40"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs1">
+    <rect
+       x="492.08022"
+       y="619.89327"
+       width="105.44576"
+       height="60.711196"
+       id="rect5" />
+    <rect
+       x="492.08022"
+       y="619.89327"
+       width="105.44576"
+       height="60.711196"
+       id="rect6" />
+    <rect
+       x="492.08022"
+       y="619.89327"
+       width="105.44576"
+       height="60.711196"
+       id="rect8" />
+  </defs>
+  <path
+     style="fill:#000000;stroke:none;stroke-opacity:1"
+     d="M 267.30938,186.36358 V 365.19732"
+     id="path8" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="学生">
+    <rect
+       style="fill:none;stroke:#9266eb;stroke-opacity:1"
+       id="rect2-5"
+       width="210.89151"
+       height="99.055122"
+       x="182.27292"
+       y="365.5"
+       inkscape:label="学生" />
+    <text
+       xml:space="preserve"
+       style="font-size:48px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke:none;stroke-opacity:1"
+       x="239"
+       y="431"
+       id="text7"
+       inkscape:label="学生"><tspan
+         sodipodi:role="line"
+         id="tspan7"
+         x="239"
+         y="431">学生</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="部门">
+    <rect
+       style="fill:none;stroke:#9266eb;stroke-opacity:1"
+       id="rect2-4"
+       width="210.89151"
+       height="99.055122"
+       x="181.75041"
+       y="91.5"
+       inkscape:label="部门" />
+    <text
+       xml:space="preserve"
+       id="text6"
+       style="font-size:48px;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect6);display:inline;fill:none;stroke:#9266eb;stroke-opacity:1"
+       inkscape:label="部门"
+       transform="translate(-255.62609,-504.86153)"><tspan
+         x="492.08008"
+         y="663.68443"
+         id="tspan2"><tspan
+           style="fill:#000000;stroke:none"
+           id="tspan1">部门</tspan></tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="课程">
+    <rect
+       style="fill:none;stroke:#9266eb;stroke-width:0.981886;stroke-opacity:1"
+       id="rect2-47"
+       width="217.30028"
+       height="92.682579"
+       x="802.46783"
+       y="362.45825"
+       inkscape:label="课程" />
+    <text
+       xml:space="preserve"
+       id="text5"
+       style="font-size:48px;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect5);display:inline;fill:none;stroke:#9266eb;stroke-opacity:1"
+       inkscape:label="课程"
+       transform="translate(374.60962,-242.83739)"><tspan
+         x="492.08008"
+         y="663.68443"
+         id="tspan4"><tspan
+           style="fill:#000000;stroke:none"
+           id="tspan3">课程</tspan></tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="g8"
+     inkscape:label="成绩"
+     transform="translate(-323.78319,192.01096)">
+    <rect
+       style="fill:none;stroke:#9266eb;stroke-width:0.981886;stroke-opacity:1"
+       id="rect7"
+       width="217.30028"
+       height="92.682579"
+       x="766.70111"
+       y="424.57944"
+       inkscape:label="成绩" />
+    <text
+       xml:space="preserve"
+       id="text8"
+       style="font-size:48px;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect8);display:inline;fill:none;stroke:#9266eb;stroke-opacity:1"
+       inkscape:label="成绩"
+       transform="translate(338.84287,-180.7162)"><tspan
+         x="492.08008"
+         y="663.68443"
+         id="tspan6"><tspan
+           style="fill:#000000;stroke:none"
+           id="tspan5">成绩</tspan></tspan></text>
+  </g>
+</svg>
