@@ -1,3 +1,6 @@
 [submodule "CPP/freeglut-cmake-configure"]
 	path = CPP/freeglut-cmake-configure
 	url = https://github.com/greenhandzdl/freeglut-cmake-configure
+[submodule "CPP/glfw-cmake-configure"]
+	path = CPP/glfw-cmake-configure
+	url = https://github.com/greenhandzdl/glfw-cmake-configure
