@@ -1,0 +1,54 @@
+# 腾讯官方机器人要求加入IP白名单，因此如下设置
+version: '3.8'
+
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tailscale-gateway
+    hostname: openclaw-node    # 在 Tailscale 管理面板中显示的设备名
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      # 必须设为 false 以开启内核级路由，否则 Tailscale 只是用户态代理，无法接管 OpenClaw 流量
+      - TS_USERSPACE=false 
+      # （可选）填入你的 Auth Key，如果不填，启动后看日志获取登录链接手动授权
+      - TS_AUTHKEY=tskey-auth-xxxxx 
+      # 核心设定：替换为你的境外节点 Tailscale IP。允许 LAN 访问以确保内网暴露端口正常可用
+      - TS_EXTRA_ARGS=--exit-node=100.X.X.X --exit-node-allow-lan-access=true 
+    volumes:
+      - ./tailscale-config:/var/lib/tailscale  # 映射 Tailscale 的配置与状态目录
+    restart: unless-stopped
+    ports:
+      # 重要：因为 OpenClaw 的网络依附于此容器，所有对外暴露的端口必须写在 Tailscale 这里
+      - "18789:18789"  # 暴露 OpenClaw Web/Gateway 端口
+
+  # openclaw:
+  #   image: phioranex/openclaw-docker:latest  # 你可以换成你正在用的 OpenClaw 镜像 (如 olegselajev241/openclaw-dmr 等)
+  #   container_name: openclaw-app
+  #   network_mode: "service:tailscale"  # 核心魔法：让 OpenClaw 共享 Tailscale 的网络栈
+  #   depends_on:
+  #     - tailscale
+  #   volumes:
+  #     - ./openclaw-config:/root/.openclaw            # 映射 OpenClaw 配置及记忆目录
+  #     - ./openclaw-workspace:/root/openclaw/workspace # 映射 OpenClaw 可操作的工作区目录
+  #   restart: unless-stopped
+  #   # 注意：此处千万不要写 ports，因为它的网络已经被 tailscale 接管了
+
+  openclaw:
+    # 使用官方 GitHub 容器镜像库的最新版
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: openclaw-app
+    # 核心：共享 Tailscale 的网络栈，所有流量走 Tailscale 隧道
+    network_mode: "service:tailscale"
+    depends_on:
+      - tailscale
+    volumes:
+      # 映射 OpenClaw 记忆、插件和核心配置目录
+      - ./openclaw-config:/root/.openclaw
+      # 映射 OpenClaw 工作区（Agent 可以直接在此目录下读写测试文件）
+      - ./openclaw-workspace:/root/openclaw/workspace
+    restart: unless-stopped
+    # 同样注意：这里不能写 ports，全部交由 tailscale 暴露
