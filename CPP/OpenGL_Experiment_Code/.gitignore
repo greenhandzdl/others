@@ -1,0 +1,8 @@
+# Ignore all files
+*
+build/
+
+# Re-include .cpp and .h files in all subdirectories
+!*/
+!**/*.cpp
+!**/*.h
