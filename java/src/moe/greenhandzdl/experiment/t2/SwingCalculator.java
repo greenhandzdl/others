@@ -148,7 +148,8 @@ public class SwingCalculator extends JFrame implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
         String command = e.getActionCommand();
 
         switch (command) {
