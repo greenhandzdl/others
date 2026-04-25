@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
 
@@ -20,29 +21,25 @@ public class SwingCalculator extends JFrame implements ActionListener {
 
     public SwingCalculator() {
         super("Swing Calculator");
+        this.setLayout(new BorderLayout()); // 使用 BorderLayout 替代 null 布局
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
 
         // 初始化显示区域
         userShowPanel = new JPanel();
-        userShowPanel.setBounds(50, 20, 300, 50);
         userShowPanel.setBackground(Color.DARK_GRAY);
-        userShowPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         textOnOutputPanel = new JLabel("欢迎来到我的计算器,请使用清除键清除输入");
-        textOnOutputPanel.setFont(new Font("Arial", Font.BOLD, 16));
-        textOnOutputPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        textOnOutputPanel.setFont(new Font("Arial", Font.BOLD, 64));
         userShowPanel.add(textOnOutputPanel);
-        add(userShowPanel);
+        userShowPanel.setPreferredSize(new Dimension(50, 80)); // 设置显示区域的首选大小
+        add(userShowPanel, BorderLayout.NORTH); // 显示区域放置在顶部
 
         // 初始化输入区域
         InputNumPanel = new JPanel();
-        InputNumPanel.setBounds(50, 100, 300, 300);
-        InputNumPanel.setLayout(null);
+        InputNumPanel.setLayout(new GridBagLayout()); // 使用 BorderLayout 管理输入区域
 
         // 初始化数字按钮面板
         NumPanel = new JPanel();
-        NumPanel.setBounds(0, 0, 200, 300);
         NumPanel.setLayout(new GridLayout(4, 3, 5, 5)); // 4行3列，按钮间距为5像素
 
         // 添加数字按钮到NumPanel
@@ -74,8 +71,7 @@ public class SwingCalculator extends JFrame implements ActionListener {
 
         // 初始化操作按钮面板
         OpPanel = new JPanel();
-        OpPanel.setBounds(210, 0, 90, 300);
-        OpPanel.setLayout(new GridLayout(6, 1, 5, 5)); // 5行1列，按钮间距为5像素
+        OpPanel.setLayout(new GridLayout(6, 1, 5, 5)); // 6行1列，按钮间距为5像素
 
         // 添加操作按钮到OpPanel
         btnadd = new JButton("+");
@@ -93,11 +89,22 @@ public class SwingCalculator extends JFrame implements ActionListener {
         OpPanel.add(btnclear);
 
         // 将NumPanel和OpPanel添加到InputNumPanel
-        InputNumPanel.add(NumPanel);
-        InputNumPanel.add(OpPanel);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        // 设置权重
+        gbc.weightx = 3;
+        gbc.weighty = 1;
+        // 设置位置
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        InputNumPanel.add(NumPanel, gbc);
+
+        gbc.weightx = 1;
+        gbc.gridx = 1;
+        InputNumPanel.add(OpPanel, gbc);
 
         // 将InputNumPanel添加到Calculator
-        add(InputNumPanel);
+        add(InputNumPanel, BorderLayout.CENTER);
 
         // 显示窗口
         setVisible(true);
@@ -181,12 +188,12 @@ public class SwingCalculator extends JFrame implements ActionListener {
             case "=":
                 // 等号按钮
                 try {
-                    double result = evaluateExpression(textOnOutputPanel.getText());
+                    BigDecimal result = evaluateExpression(textOnOutputPanel.getText());
                     textOnOutputPanel.setText(String.valueOf(result));
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(
                             this,
-                            "输入错误：" + ex.getMessage(),
+                            "错误：" + ex.getMessage(),
                             "错误",
                             JOptionPane.ERROR_MESSAGE
                     );
@@ -198,7 +205,7 @@ public class SwingCalculator extends JFrame implements ActionListener {
         }
     }
 
-    public double evaluateExpression(String expression) throws Exception {
+    public BigDecimal evaluateExpression(String expression) throws Exception {
         // 检查表达式是否合法
         if (!expression.matches("^[0-9+\\-*/().\\s]+$")) {
             throw new IllegalArgumentException("表达式包含非法字符！");
@@ -268,36 +275,47 @@ public class SwingCalculator extends JFrame implements ActionListener {
         return postfix;
     }
 
-    private double evaluatePostfix(List<String> postfix) throws Exception {
-        Stack<Double> stack = new Stack<>();
+    private BigDecimal evaluatePostfix(List<String> postfix) throws Exception {
+        postfix.forEach(System.out::println);// Debugger
+        Stack<BigDecimal> stack = new Stack<>();
 
         for (String token : postfix) {
             // 如果是数字
             if (isNumeric(token)) {
-                stack.push(Double.parseDouble(token));
+                stack.push(new BigDecimal(token));
             }
             // 如果是操作符
             else if (isOperator(token.charAt(0))) {
                 if (stack.size() < 2) {
-                    throw new Exception("表达式错误！");
+                    switch (token.charAt(0)){
+                        case '+':
+                            break;
+                        case '-':
+                            if(stack.size() < 1) throw new Exception("不想处理多个负号问题！");
+                            stack.push(stack.pop().negate());
+                            break;
+                        default:
+                            throw new Exception("表达式错误！");
+                    }
+                    continue;
                 }
-                double b = stack.pop();
-                double a = stack.pop();
+                BigDecimal b = stack.pop();
+                BigDecimal a = stack.pop();
                 switch (token.charAt(0)) {
                     case '+':
-                        stack.push(a + b);
+                        stack.push(a.add(b));
                         break;
                     case '-':
-                        stack.push(a - b);
+                        stack.push(a.subtract(b));
                         break;
                     case '*':
-                        stack.push(a * b);
+                        stack.push(a.multiply(b));
                         break;
                     case '/':
-                        if (b == 0) {
+                        if (b.equals(BigDecimal.ZERO)) {
                             throw new ArithmeticException("除数不能为零！");
                         }
-                        stack.push(a / b);
+                        stack.push(a.divide(b, 10, BigDecimal.ROUND_HALF_UP)); // 保留10位小数，四舍五入
                         break;
                     default:
                         throw new IllegalArgumentException("未知操作符：" + token);
